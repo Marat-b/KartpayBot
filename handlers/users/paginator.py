@@ -16,7 +16,7 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 	if call.data == 'assigned_to':
 		page = 1
 		enquiries = Enquiry(call.from_user.id, "Передан инженеру")
-		await state.update_data(request_data = enquiries.get_records())
+		await state.update_data(request_data = enquiries.get_entities())
 		data_state = await state.get_data()
 		request_data = data_state.get("request_data")
 		# print(f"request_data = {request_data}")

@@ -20,6 +20,9 @@ class Enquiry:
 		self.__request_db["cals"] = True
 		self.__request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
 		self.__request_db["filter"]["row"]["f78321"]["value"] = type_request
+		
+	def get_entities(self):
+		pass
 	
 	def get_records(self):
 		"""
@@ -83,10 +86,7 @@ class Enquiry:
 				id = "3421"
 				break
 		return id
-		# if str(telegram_user_id) == str(config.ADMINS):
-		# 	return "3421"
-		# else:
-		# 	return None
+		
 
 
 if __name__ == "__main__":

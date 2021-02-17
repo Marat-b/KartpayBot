@@ -10,10 +10,11 @@ def choice_request():
 			InlineKeyboardButton(text = "Передан инженеру", callback_data = "assigned_to")
 		],
 		[
-			InlineKeyboardButton(text = "УПД подписан", callback_data = "signed")
+			InlineKeyboardButton(text = "Установлено", callback_data = "setup")
 		],
 		[
-			InlineKeyboardButton(text = "Установлено", callback_data = "setup")
+			InlineKeyboardButton(text = "УПД подписан", callback_data = "signed")
 		]
+		
 	])
 	return request

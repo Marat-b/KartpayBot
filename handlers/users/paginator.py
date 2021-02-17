@@ -20,8 +20,8 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 	if call_data == 'assigned_to' or call_data == 'signed' or call_data == 'setup':
 		page = 1
 		state_name = get_state_name(str(call_data))
-		enquiries = Enquiry(call.from_user.id, state_name)
-		await state.update_data(request_data = enquiries.get_entities(), state_name = state_name)
+		enquiries = Enquiry(call.from_user.id)
+		await state.update_data(request_data = enquiries.get_entities(state_name), state_name = state_name, call_data = call_data)
 		data_state = await state.get_data()
 		request_data = data_state.get("request_data")
 		# print(f"request_data = {request_data}")
@@ -36,7 +36,10 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 			current_page = int(page),
 			data_pattern = 'page#{page}'
 	)
+	
 	paginator.add_after(InlineKeyboardButton(text = "<< Назад", callback_data = "choice_buttons"))
 	if len(request_data) > 0:
+		if data_state.get("call_data") == 'assigned_to':
+			paginator.add_before(InlineKeyboardButton(text = "Выполнено", callback_data = "task_done#{}".format(request_data[page - 1]["id"])))
 		await call.message.edit_text(format_enquiry(data_state.get("state_name"), request_data[page - 1]), reply_markup = paginator.markup) #lambda page: page - 1 if page > 0
 	# else 0

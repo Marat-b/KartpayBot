@@ -7,7 +7,13 @@ from aiogram.utils.callback_data import CallbackData
 def choice_request():
 	request = InlineKeyboardMarkup(row_width = 1, inline_keyboard = [
 		[
-			InlineKeyboardButton(text = "Назначено инженеру", callback_data = "assigned_to")
+			InlineKeyboardButton(text = "Передан инженеру", callback_data = "assigned_to")
+		],
+		[
+			InlineKeyboardButton(text = "УПД подписан", callback_data = "signed")
+		],
+		[
+			InlineKeyboardButton(text = "Установлено", callback_data = "setup")
 		]
 	])
 	return request

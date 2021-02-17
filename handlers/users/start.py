@@ -10,4 +10,4 @@ from data import config, access_id
 @dp.message_handler(CommandStart())
 async def bot_start(message: types.Message):
     await message.answer(f"Привет, {message.from_user.full_name}!")
-    await message.answer("Кнопки", reply_markup = choice_request())
+    await message.answer("Выберите тип заявки:", reply_markup = choice_request())

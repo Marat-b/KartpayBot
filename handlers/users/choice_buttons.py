@@ -6,4 +6,4 @@ from loader import dp
 
 @dp.callback_query_handler(text = "choice_buttons")
 async def buttons(call: CallbackQuery):
-	await call.message.edit_text("Выберите кнопки", reply_markup = choice_request())
+	await call.message.edit_text("Выберите тип заявки:", reply_markup = choice_request())

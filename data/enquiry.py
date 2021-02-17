@@ -26,6 +26,10 @@ class Enquiry:
 		self.__request_db["filter"]["row"]["f78321"]["value"] = type_request
 	
 	def get_entities(self):
+		"""
+		get all entities of requests
+		:return: all records
+		"""
 		if self.__user_id is None:
 			return list()
 		all_records = self.__get_records(self.__request_db)
@@ -34,6 +38,7 @@ class Enquiry:
 	def __get_records(self, request_db):
 		"""
 		Get records of clients once
+		:param: db's records
 		:return: All records of clients
 		"""
 		all_clients = list()
@@ -55,6 +60,7 @@ class Enquiry:
 	def __get_all_records(self, request_db, amount_returned_records, amount_all_records):
 		"""
 		Get added records of clients if amount_all_records greater than amount_returned_records
+		:param request_db:
 		:param amount_returned_records:
 		:param amount_all_records:
 		:return: All records of clients

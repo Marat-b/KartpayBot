@@ -1,8 +1,10 @@
 from aiogram.utils.markdown import bold, hcode
 
 
-def format_enquiry(enquiry):
+def format_enquiry(state_name, enquiry):
 	formatted_enquiry = [
+		'<code>Заявка со статусом:</code> <i>{}</i>'.format(state_name),
+		'',
 		'<i>Номер заявки: {}</i>'.format(enquiry["id"]),
 		'Клиент: <b>{}</b>'.format(enquiry['f78201']),
 		'Адрес: {}'.format(enquiry['f78211']),

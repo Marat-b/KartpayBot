@@ -1,22 +1,27 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardButton
+from aiogram.types.base import String
 from telegram_bot_pagination import InlineKeyboardPaginator
 from loader import dp
 
 from data.enquiry import Enquiry
-from utils import format_enquiry
+from utils import format_enquiry, get_state_name
 
 
 # data = ["Q", "A", "Z", "W", "S", "X", "E", "D", "C", "R", "F", "V"]
 
-@dp.callback_query_handler(regexp = '(page\#\d|assigned_to)')
+@dp.callback_query_handler(regexp = '(page\#\d|assigned_to|signed|setup)')
 async def callback_paginator(call: CallbackQuery, state: FSMContext):
 	# print(f'-> {str(call.from_user.id)}')
+	call_data = call.data
+	state_name = ""
+	# print(f"call_data = {call_data}")
 	
-	if call.data == 'assigned_to':
+	if call_data == 'assigned_to' or call_data == 'signed' or call_data == 'setup':
 		page = 1
-		enquiries = Enquiry(call.from_user.id, "Передан инженеру")
-		await state.update_data(request_data = enquiries.get_entities())
+		state_name = get_state_name(str(call_data))
+		enquiries = Enquiry(call.from_user.id, state_name)
+		await state.update_data(request_data = enquiries.get_entities(), state_name = state_name)
 		data_state = await state.get_data()
 		request_data = data_state.get("request_data")
 		# print(f"request_data = {request_data}")
@@ -25,7 +30,7 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 		request_data = data_state.get("request_data")
 		# print(f"request_data = {request_data}")
 		page = int(call.data.split('#')[1])
-	print(f'page={str(page)}')
+	# print(f'page={str(page)}')
 	paginator = InlineKeyboardPaginator(
 			len(request_data),
 			current_page = int(page),
@@ -33,4 +38,5 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 	)
 	paginator.add_after(InlineKeyboardButton(text = "<< Назад", callback_data = "choice_buttons"))
 	if len(request_data) > 0:
-		await call.message.edit_text(format_enquiry(request_data[page - 1]), reply_markup = paginator.markup) #lambda page: page - 1 if page > 0 else 0
+		await call.message.edit_text(format_enquiry(data_state.get("state_name"), request_data[page - 1]), reply_markup = paginator.markup) #lambda page: page - 1 if page > 0
+	# else 0

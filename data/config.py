@@ -11,6 +11,11 @@ BOT_TOKEN = env.str("BOT_TOKEN")  # Забираем значение типа s
 ADMINS = env.list("ADMINS")  # Тут у нас будет список из админов
 IP = env.str("ip")  # Тоже str, но для айпи адреса хоста
 
+YANDEX_TOKEN = env.str("YANDEX_TOKEN")
+CLOUD_FILE_PATH = env.str("CLOUD_FILE_PATH")
+TELEGRAM_FILE_PATH = env.str("TELEGRAM_FILE_PATH")
+CLOUD_PUBLIC_FILE_PATH = env.str("CLOUD_PUBLIC_FILE_PATH")
+
 ############################ Kartpay data #####################################
 
 AUTH_KEY = env.str("AUTH_KEY")

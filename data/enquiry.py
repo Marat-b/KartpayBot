@@ -7,7 +7,7 @@ class Enquiry:
 	
 	def __init__(self, telegram_user_id):
 		self.__url_read_table = config.URL_READ_TABLE
-		self.__request_telegramuser = config.REQUEST_TABLE_TELEGRAMUSER
+		self.__request_telegramuser = config.REQUEST_TABLE_TELEGRAMUSER.copy()
 		self.__request_telegramuser["filter"]["row"]["f81371"]["value"] = str(telegram_user_id)
 		self.__user_id = self.__get_user_id(telegram_user_id)
 	
@@ -18,8 +18,11 @@ class Enquiry:
 		"""
 		if self.__user_id is None:
 			return list()
+		
+		
 		request_db = config.REQUEST_DB.copy()
-		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
+		
+		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id   # user id from Kartpay
 		request_db["filter"]["row"]["f78321"]["value"] = type_request
 		all_records = self.__get_records(request_db)
 		return all_records
@@ -33,8 +36,9 @@ class Enquiry:
 		all_clients = list()
 		id_access = access_id.Auth.get_access_id()
 		if access_id is None:
-			return all_clients
+			return list()
 		request_db["access_id"] = id_access
+		
 		clients, json_table = self.__get_all_records(request_db, 0, int(config.MAX_AMOUNT_RECORDS))
 		# summary all clients
 		all_clients += clients
@@ -79,7 +83,7 @@ class Enquiry:
 		:return: user ID for Kartpay
 		"""
 		all_records = self.__get_records(self.__request_telegramuser)
-		# print(f"all_records = {all_records}")
+		print(f"all_records = {all_records}")
 		id_user = None
 		for record in all_records:
 			if str(telegram_user_id) == record["f81371"]:
@@ -121,7 +125,7 @@ if __name__ == "__main__":
 	r = Enquiry("919930316")
 	# rr = Request("*********************", "Передан инженеру")
 	clients = r.get_entities("Передан инженеру")
-	print(r.get_entities("Передан инженеру"))
+	print(clients)
 	
 	for i, client in enumerate(clients):
 		print(f"{str(i)}. Клиент = {client['f78201']}, Адрес клиента = {client['f78211']}, ID = {client['id']}, Телефон = {client['f78341']}, Статус = , "

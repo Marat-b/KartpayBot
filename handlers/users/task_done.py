@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery, Message, ContentType
 
+from keyboards.inline.choice_request_buttons import choice_request
 from loader import dp, bot
 from states.task_done_state import TaskDoneState
 import aiohttp
@@ -11,14 +12,14 @@ from data.enquiry import Enquiry
 from data.cloud_storage import CloudStorage
 
 
-@dp.callback_query_handler(regexp = "task_done#.+")
+@dp.callback_query_handler(regexp = "^task_trip_planned#.+")
 async def task_done_start(call: CallbackQuery, state: FSMContext):
-	print("-> task_done call.data = {}".format(call.data))
+	# print("-> task_done call.data = {}".format(call.data))
 	await call.message.edit_text("Введите дату установки в формате дд.мм.гггг:")
 	# await call.message.answer(str(date.today()))
 	id_task = call.data.split("#")[1]
 	await state.update_data(id_task = id_task)
-	await TaskDoneState.PutPhoto.set()
+	await TaskDoneState.PutDate.set()
 
 
 @dp.message_handler(state = TaskDoneState.PutDate)
@@ -36,7 +37,7 @@ async def task_done_date(message: types.Message, state: FSMContext):
 			await state.update_data(date_day = date_day, date_month = date_month, date_year = date_year)
 			await message.answer("Введите растояние пробега в км:")
 			await TaskDoneState.PutDistance.set()
-		# await state.finish()
+			# await state.finish()
 		else:
 			await message.answer("Формат даты неверен, дата должна содержать только цифры.\nВведите дату установки в формате дд.мм.гггг:")
 	else:
@@ -88,11 +89,11 @@ async def task_done_photo(message: types.Message, state: FSMContext):
 		else:
 			await message.answer("Файл не удалось сохранить.")
 		enquiry = Enquiry(message.from_user.id)
-		full_date = "2021-02-02 00:00:00"
-		distance = 1
+		# full_date = "2021-02-02 00:00:00"
+		# distance = 1
 		is_done = enquiry.update_act(id = id_task, f78361 = int(distance), f78311 = full_date, f78321 = "Установлено", f81381 = file_path)
 		if is_done:
-			await message.answer("Запись в БД успешно обновлена!")
+			await message.answer("Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлено</b>".format(str(id_task)), reply_markup = choice_request())
 		else:
 			await message.answer("Запись в БД завершилось ошибкой!")
 		

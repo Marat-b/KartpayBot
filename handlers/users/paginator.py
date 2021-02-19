@@ -46,5 +46,4 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 		if data_state.get("call_data") == 'setup':
 			# print("task_setup#{}".format(request_data[0]["id"]))
 			paginator.add_before(InlineKeyboardButton(text = "УПД подписан", callback_data = "task_setup#{}".format(request_data[0]["id"])))
-		await call.message.edit_text(format_enquiry(data_state.get("state_name"), request_data[len(request_data) - 1]), reply_markup = paginator.markup) #lambda page: page - 1 if page > 0
-	
+		await call.message.edit_text(format_enquiry(data_state.get("state_name"), request_data[page - 1]), reply_markup = paginator.markup) #lambda page: page - 1 if page > 0

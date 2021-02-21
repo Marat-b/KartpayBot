@@ -49,6 +49,8 @@ class BaseEnquiry:
 			response_read_table = requests.post(self.__url_read_table, json = request_db)
 			# convert records from text to json
 			# print(f"response_read_table = {response_read_table}, response_read_table.text = {response_read_table.text}")
+			if "code" not in response_read_table.text:
+				return list(), {"count": 0, "count_all": 0}
 			json_table = json.loads(response_read_table.text)
 			if int(json_table["code"]) != 0 or not ("data" in json_table.keys()):
 				return clients, {"count": 0, "count_all": 0}
@@ -67,6 +69,8 @@ class BaseEnquiry:
 		"""
 		all_records = self._get_records(self.__request_telegramuser)
 		# print(f"all_records = {all_records}")
+		if all_records is None:
+			return None
 		id_user = None
 		for record in all_records:
 			if str(telegram_user_id) == record["f81371"]:

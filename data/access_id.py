@@ -10,7 +10,10 @@ class Auth:
 		try:
 			response = requests.post(config.URL_GET_SALT, json = config.DATA_GET_SALT)
 			# print(f"config.URL_GET_SALT = {config.URL_GET_SALT}, config.DATA_GET_SALT = {config.DATA_GET_SALT}")
+			# print(f"response = {response}")
 			# print(f"response.text = {response.text}")
+			if "code" not in response.text:
+				return None
 			json_data = json.loads(response.text)
 			if json_data['code'] == 0:
 				return json_data['salt']

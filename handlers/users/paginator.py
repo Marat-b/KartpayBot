@@ -32,13 +32,13 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 		page = int(call.data.split('#')[1])
 		# print(f'page={str(page)}')
 	paginator = InlineKeyboardPaginator(
-			len(request_data),
+			0 if request_data is None else len(request_data),
 			current_page = int(page),
 			data_pattern = 'page#{page}'
 	)
 	
 	paginator.add_after(InlineKeyboardButton(text = "<< Назад", callback_data = "choice_buttons"))
-	if len(request_data) > 0:
+	if len(request_data) if request_data is not None else 0 > 0:
 		if data_state.get("call_data") == 'assigned_to':
 			paginator.add_before(InlineKeyboardButton(text = "Запланирован выезд", callback_data = "task_assign_to#{}".format(request_data[0]["id"])))
 		if data_state.get("call_data") == 'trip_planned':

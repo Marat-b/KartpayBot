@@ -1,5 +1,6 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery
+from aiogram.utils.emoji import emojize
 
 from data.enquiry import Enquiry
 from keyboards.inline.choice_request_buttons import choice_request
@@ -14,7 +15,7 @@ async def task_done_start(call: CallbackQuery):
 	
 	is_done = enquiry.update_table(id = id_task, f78321 = "Запланирован выезд")
 	if is_done:
-		await call.message.edit_text("Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Запланирован выезд</b>".format(str(id_task)), reply_markup =
-		choice_request())
+		await call.message.edit_text("{}  Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Запланирован выезд</b>".format(emojize(
+				":white_check_mark:"), str(id_task)), reply_markup = choice_request())
 	else:
-		await call.message.edit_text("Запись в БД завершилось ошибкой!", reply_markup = choice_request())
+		await call.message.edit_text("{}  Запись в БД завершилось ошибкой!".format(emojize(":hangbang:")), reply_markup = choice_request())

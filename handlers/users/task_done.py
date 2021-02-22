@@ -1,6 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery, Message, ContentType
+from aiogram.utils.emoji import emojize
 
 from keyboards.inline.choice_request_buttons import choice_request
 from loader import dp, bot
@@ -37,7 +38,7 @@ async def task_done_date(message: types.Message, state: FSMContext):
 			await state.update_data(date_day = date_day, date_month = date_month, date_year = date_year)
 			await message.answer("Введите растояние пробега в км:")
 			await TaskDoneState.PutDistance.set()
-			# await state.finish()
+		# await state.finish()
 		else:
 			await message.answer("Формат даты неверен, дата должна содержать только цифры.\nВведите дату установки в формате дд.мм.гггг:")
 	else:
@@ -49,14 +50,14 @@ async def task_done_distance(message: types.Message, state: FSMContext):
 	distance_done = message.text
 	if distance_done.isdigit():
 		await state.update_data(distance = distance_done)
-		await message.answer("Загрузите фотографию с актом проделанных работ:")
+		await message.answer("Загрузите фотографию с актом проделанных работ, нажав на иконку {}, или неберите слово 'нет', если акта нет:".format(emojize(":paperclip:")))
 		await TaskDoneState.PutPhoto.set()
 	# await state.finish()
 	else:
 		await message.answer("Растояние пробега должно быть числом.\nВведите растояние пробега в км:")
 
 
-@dp.message_handler(content_types = [ContentType.PHOTO, ContentType.DOCUMENT], state = TaskDoneState.PutPhoto)
+@dp.message_handler(content_types = ContentType.ANY, state = TaskDoneState.PutPhoto)
 async def task_done_photo(message: types.Message, state: FSMContext):
 	data_state = await state.get_data()
 	id_task = data_state.get("id_task")
@@ -76,7 +77,9 @@ async def task_done_photo(message: types.Message, state: FSMContext):
 			file_id = message.document.file_id
 	
 	if file_id is None:
-		await message.answer("Загруженный файл не фотография.\nПовторите попытку!")
+		# await message.answer("Загруженный файл не фотография.\nПовторите попытку!")
+		await message.answer("Файл с фотографией акта не загружен и не сохранён.")
+		file_path = ""
 	else:
 		await message.answer("Минутку, произвожу запись в БД...")
 		dest_file = "photo_act_{}{}{}_{}.jpg".format(date_year, date_month, date_day, id_task)
@@ -85,17 +88,17 @@ async def task_done_photo(message: types.Message, state: FSMContext):
 		file_path, is_saved = CloudStorage.save_file(source_file["file_path"], dest_file)
 		await message.delete()
 		if is_saved:
-			await message.answer("Файл успешно сохранён и доступен по ссылке - {}".format(file_path))
+			await message.answer("{}  Файл успешно сохранён и доступен по ссылке - {}".format(emojize(":white_check_mark:"), file_path), disable_web_page_preview = True)
 		else:
-			await message.answer("Файл не удалось сохранить.")
-		enquiry = Enquiry(message.from_user.id)
-		# full_date = "2021-02-02 00:00:00"
-		# distance = 1
-		is_done = enquiry.update_act(id = id_task, f78361 = int(distance), f78311 = full_date, f78321 = "Установлено", f81381 = file_path)
-		if is_done:
-			await message.answer("Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлено</b>".format(str(id_task)), reply_markup = choice_request())
-		else:
-			await message.answer("Запись в БД завершилось ошибкой!")
-		
-		await state.finish()
-
+			await message.answer("{}  Файл не удалось сохранить.".format(emojize(":hangbang:")))
+	enquiry = Enquiry(message.from_user.id)
+	# full_date = "2021-02-02 00:00:00"
+	# distance = 1
+	is_done = enquiry.update_act(id = id_task, f78361 = int(distance), f78311 = full_date, f78321 = "Установлено", f81381 = file_path)
+	if is_done:
+		await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлено</b>".
+		                     format(emojize(":white_check_mark:"), str(id_task)), reply_markup = choice_request())
+	else:
+		await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":hangbang:")))
+	
+	await state.finish()

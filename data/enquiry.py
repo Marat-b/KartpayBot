@@ -6,9 +6,12 @@ from data.base_enquiry import BaseEnquiry
 
 class Enquiry(BaseEnquiry):
 	
-	def __init__(self, telegram_user_id):
+	def __init__(self, telegram_user_id = None):
 		super().__init__(telegram_user_id)
-		self.__user_id = self._get_user_id(telegram_user_id)
+		if telegram_user_id is None:
+			self.__user_id = None
+		else:
+			self.__user_id = self._get_user_id(telegram_user_id)
 	
 	def get_entities(self, type_request):
 		"""
@@ -30,7 +33,7 @@ class Enquiry(BaseEnquiry):
 		:return:
 		"""
 		id_access = access_id.Auth.get_access_id()
-		if self.__user_id is None or access_id is None:
+		if access_id is None:
 			return False
 		
 		url_update_table = config.URL_UPDATE_TABLE
@@ -53,7 +56,7 @@ class Enquiry(BaseEnquiry):
 	
 	def update_table(self, **kwargs):
 		id_access = access_id.Auth.get_access_id()
-		if self.__user_id is None or access_id is None:
+		if access_id is None:
 			return False
 		
 		url_update_table = config.URL_UPDATE_TABLE
@@ -63,7 +66,7 @@ class Enquiry(BaseEnquiry):
 		for args in kwargs:
 			if args[0] == "f":
 				update_table["data"]["row"][args] = kwargs[args]
-			# print(args)
+		# print(args)
 		# print(f"update_table = {update_table}")
 		response_update_table = requests.post(url_update_table, json = update_table)
 		# print(f"response_update_table = {response_update_table}")

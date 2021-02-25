@@ -53,7 +53,7 @@ async def task_done_date(message: Message, state: FSMContext):
 				await message.answer("{} Заявка № <b>{}</b>, успешно запланирована на дату {}".
 				                     format(emojize(":white_check_mark:"), str(id_task), short_date), reply_markup = inline_type_request_menu())
 			else:
-				await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":hangbang:")))
+				await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":bangbang:")))
 		else:
 			await message.answer("{}  Вы ввели неверную дату, дата должна содержать только цифры.\nВведите плановую дату исполнения в формате дд.мм.гггг:".format(emojize(
 					":exclamation:")))

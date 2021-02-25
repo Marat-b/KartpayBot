@@ -1,15 +1,19 @@
+import sys
+
 from environs import Env
 import json
 # import locale
 
 # Теперь используем вместо библиотеки python-dotenv библиотеку environs
 # locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
+# -*- coding: utf-8 -*-
 env = Env()
 env.read_env()
 
 BOT_TOKEN = env.str("BOT_TOKEN")  # Забираем значение типа str
 ADMINS = env.list("ADMINS")  # Тут у нас будет список из админов
 IP = env.str("ip")  # Тоже str, но для айпи адреса хоста
+MANAGERS = env.list("MANAGERS")
 
 YANDEX_TOKEN = env.str("YANDEX_TOKEN")
 CLOUD_FILE_PATH = env.str("CLOUD_FILE_PATH")
@@ -30,6 +34,12 @@ URL_READ_TABLE = env.str("url_read_table")
 URL_UPDATE_TABLE = env.str("url_update_table")
 # print(env.str("request_db"))
 REQUEST_DB = json.loads(env.str("request_db"))
+REQUEST_FOR_PAYING = json.loads(env.str("request_for_paying"))
 REQUEST_TABLE_TELEGRAMUSER = json.loads(env.str("request_table_telegramuser"))
 UPDATE_TABLE_ACT = json.loads(env.str("update_table_act"))
 UPDATE_TABLE_UPD = json.loads(env.str("update_table_upd"))
+
+TEST = env.str("TEST").encode('cp1251').decode('utf-8')
+print(f"TEST = {TEST}")
+print(sys.getwindowsversion())
+# os.environ["TEST"].encode('utf-8')

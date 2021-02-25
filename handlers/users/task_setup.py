@@ -53,7 +53,7 @@ async def task_done_photo(message: types.Message, state: FSMContext):
 		if is_saved:
 			await message.answer("{}  Файл успешно сохранён и доступен по ссылке - {}".format(emojize(":white_check_mark:"), file_path), disable_web_page_preview = True)
 		else:
-			await message.answer("{}  Файл не удалось сохранить.".format(emojize(":hangbang:")))
+			await message.answer("{}  Файл не удалось сохранить.".format(emojize(":bangbang:")))
 	enquiry = Enquiry(message.from_user.id)
 	
 	is_done = enquiry.update_table(id = id_task, f78321 = "УПД подписан", f81301 = file_path)
@@ -61,6 +61,6 @@ async def task_done_photo(message: types.Message, state: FSMContext):
 		await message.answer("{}  Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>УПД подписан</b>".format(emojize(
 			":white_check_mark:"), str(id_task)), reply_markup = choice_request())
 	else:
-		await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":hangbang:")))
+		await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":bangbang:")))
 	
 	await state.finish()

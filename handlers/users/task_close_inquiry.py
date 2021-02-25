@@ -73,7 +73,7 @@ async def task_done_distance(message: Message, state: FSMContext):
 		await message.answer("Растояние пробега должно быть числом.\nВведите растояние пробега в км (ноль, если заявка в черте города):")
 
 
-@dp.message_handler(content_types = [ContentType.PHOTO, ContentType.DOCUMENT], state = TaskCloseInquiryState.PutActPhoto)
+@dp.message_handler(content_types = ContentType.ANY, state = TaskCloseInquiryState.PutActPhoto)
 async def task_act_photo(message: Message, state: FSMContext):
 	data_state = await state.get_data()
 	id_task = data_state.get("id_task")

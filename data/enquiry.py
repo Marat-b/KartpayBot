@@ -26,6 +26,20 @@ class Enquiry(BaseEnquiry):
 		all_records = self._get_records(request_db)
 		return all_records
 	
+	def get_entities_for_paying(self, type_request, yes_no):
+		"""
+		get all entities for paying (f81311 - negative, f78321 - upd is signed)
+		:return: all records
+		"""
+		if self.__user_id is None:
+			return list()
+		request_db = config.REQUEST_FOR_PAYING.copy()
+		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
+		request_db["filter"]["row"]["f78321"]["value"] = type_request
+		request_db["filter"]["row"]["f81311"]["value"] = yes_no
+		all_records = self._get_records(request_db)
+		return all_records
+	
 	def update_act(self, **kwargs):
 		"""
 		Update record with status

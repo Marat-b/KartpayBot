@@ -1,6 +1,7 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardButton
 from aiogram.types.base import String
+from aiogram.utils.emoji import emojize
 from telegram_bot_pagination import InlineKeyboardPaginator
 from loader import dp
 
@@ -49,15 +50,18 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 	if len(request_data) if request_data is not None else 0 > 0:
 		if data_state.get("call_data") == 'assigned_to':
 			# print("task_assign_to#{}".format(request_data[0]["id"]))
-			paginator.add_after(InlineKeyboardButton(text = "Запланировать", callback_data = "task_to_plan#{}".format(request_data[0]["id"])))
-			paginator.add_after(InlineKeyboardButton(text = "Закрыть заявку", callback_data = "task_close_inquire#{}".format(request_data[0]["id"])))
+			paginator.add_after(InlineKeyboardButton(text = "{}  Запланировать".format(emojize(":clipboard:")), callback_data = "task_to_plan#{}".format(request_data[0]["id"])))
+			paginator.add_after(InlineKeyboardButton(text = "{}  Закрыть заявку".format(emojize(":closed_book:")), callback_data = "task_close_inquire#{}".format(request_data[0][
+				                                                                                                                                                 "id"])))
 		if data_state.get("call_data") == 'setup':
 			# print("task_setup#{}".format(request_data[0]["id"]))
-			paginator.add_after(InlineKeyboardButton(text = "Редактировать пробег", callback_data = "task_edit_distance#{}".format(request_data[0]["id"])))
-			paginator.add_after(InlineKeyboardButton(text = "Загрузить акт", callback_data = "task_edit_act#{}".format(request_data[0]["id"])))
-			paginator.add_after(InlineKeyboardButton(text = "Загрузить УПД", callback_data = "task_edit_upd#{}".format(request_data[0]["id"])))
+			paginator.add_after(InlineKeyboardButton(text = "{}  Редактировать пробег".format(emojize(":car:")), callback_data = "task_edit_distance#{}".format(request_data[0][
+				                                                                                                                                                 "id"])))
+			paginator.add_after(InlineKeyboardButton(text = "{}  Загрузить акт".format(emojize(":page_facing_up:")), callback_data = "task_edit_act#{}".format(request_data[0][
+				                                                                                                                                                 "id"])))
+			paginator.add_after(InlineKeyboardButton(text = "{}  Загрузить УПД".format(emojize(":inbox_tray:")), callback_data = "task_edit_upd#{}".format(request_data[0]["id"])))
 			
-		paginator.add_after(InlineKeyboardButton(text = "<< Назад", callback_data = "choice_buttons"))
+		paginator.add_after(InlineKeyboardButton(text = "{}  Назад".format(emojize(":leftwards_arrow_with_hook:")), callback_data = "choice_buttons"))
 		await call.message.edit_text(format_enquiry(data_state.get("state_name"), request_data[page - 1]), reply_markup = paginator.markup)
 
 
@@ -92,7 +96,7 @@ async def callback_paginator_for_paying(call: CallbackQuery, state: FSMContext):
 	
 	if len(request_data) if request_data is not None else 0 > 0:
 		if data_state.get("call_data") == 'signed':
-			paginator.add_after(InlineKeyboardButton(text = "Запросить выплату", callback_data = "task_sign&{}".format(request_data[0]["id"])))
+			paginator.add_after(InlineKeyboardButton(text = "{}  Запросить выплату".format(emojize(":bell:")), callback_data = "task_sign&{}".format(request_data[0]["id"])))
 		
-		paginator.add_after(InlineKeyboardButton(text = "<< Назад", callback_data = "choice_buttons"))
+		paginator.add_after(InlineKeyboardButton("{}  Назад".format(emojize(":leftwards_arrow_with_hook:")), callback_data = "choice_buttons"))
 		await call.message.edit_text(format_enquiry_for_paying(request_data[page - 1]), reply_markup = paginator.markup)

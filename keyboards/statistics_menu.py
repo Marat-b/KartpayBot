@@ -3,8 +3,8 @@ from aiogram.utils.emoji import emojize
 
 from keyboards.main_menu import main_menu
 
-button_current_month = KeyboardButton('{}{}  Текущий месяц'.format(emojize(":calendar:"), emojize(":arrow_right:")))
-button_prior_month = KeyboardButton('{}{}  Предыдущий месяц'.format(emojize(":arrow_left:"), emojize(":calendar:")))
+button_current_month = KeyboardButton('{}  Текущий месяц'.format(emojize(":date:")))
+button_prior_month = KeyboardButton('{}  Предыдущий месяц'.format(emojize(":calendar:")))
 button_back = KeyboardButton('{}  Назад'.format(emojize(":leftwards_arrow_with_hook:")))
 
 statistics_menu = ReplyKeyboardMarkup(resize_keyboard=True)

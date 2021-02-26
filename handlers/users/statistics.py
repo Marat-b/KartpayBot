@@ -32,7 +32,7 @@ async def statistics_current_month(message: Message):
 
 async def statistics(message: Message, last_month = False):
 	# print(f"statistics_current_month -> {message.from_user.id}")
-	await message.delete()
+	# await message.delete()
 	enquiry = Enquiry(message.from_user.id)
 	first_date, end_date = create_date(last_month = last_month)
 	count_setup_status = len(enquiry.get_entities_for_statistics(STATUS_SETUP, first_date, end_date))
@@ -50,8 +50,12 @@ async def statistics(message: Message, last_month = False):
 	for entity in entities:
 		payed_amount += int(entity["f81291"])
 		payed_count += 1
-	strings = ['Заявок со статусом "Установлено" - <b>{}</b> шт.'.format(count_setup_status),
-	           'Заявок со статусом "УПД подписано" - <b>{}</b> шт., на общую сумму - <b>{}</b> руб.'.format(count, amount),
-	           'Оплачено всего <b>{}</b> заявок на сумму <b>{}</b> руб.'.format(payed_count, payed_amount)
+	strings = ['{}  Заявок со статусом "Установлено" - <b>{}</b> шт.'.format(emojize(":one:"), count_setup_status),
+	           '{}  Заявок со статусом "УПД подписано" - <b>{}</b> шт., на общую сумму - <b>{}</b> руб.'.format(emojize(":two:"), count, amount),
+	           '{}  Оплачено всего <b>{}</b> заявок на сумму <b>{}</b> руб.'.format(emojize(":three:"), payed_count, payed_amount)
 	           ]
+	# if last_month:
+	# 	strings.insert(0, "<b>Предыдущий месяц</b>")
+	# else:
+	# 	strings.insert(0, "<b>Текущий месяц</b>")
 	await message.answer("\n".join(strings), reply_markup = statistics_menu)

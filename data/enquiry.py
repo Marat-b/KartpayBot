@@ -38,6 +38,7 @@ class Enquiry(BaseEnquiry):
 		request_db = json.loads(request_db_str)
 		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
 		request_db["filter"]["row"]["f78321"]["value"] = type_request
+		request_db["filter"]["row"]["f81311"]["value"] = "Нет"
 		all_records = self._get_records(request_db)
 		return all_records
 	
@@ -110,8 +111,6 @@ class Enquiry(BaseEnquiry):
 		for args in kwargs:
 			if args[0] == "f":
 				update_table["data"]["row"][args] = kwargs[args]
-		# print(args)
-		# print(f"update_table = {update_table}")
 		response_update_table = requests.post(url_update_table, json = update_table)
 		# print(f"response_update_table = {response_update_table}")
 		json_table = json.loads(response_update_table.text)

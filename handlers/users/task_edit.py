@@ -3,6 +3,7 @@ from aiogram.types import CallbackQuery, Message, ContentType
 from aiogram.utils.emoji import emojize
 
 from data.cloud_storage import CloudStorage
+from data.config import STATUS_UPD_SIGNED
 from data.enquiry import Enquiry
 from keyboards.inline.inline_back_to_setup import inline_back_to_setup
 from keyboards.inline.inline_type_request_menu import inline_type_request_menu
@@ -38,12 +39,13 @@ async def task_edit_distance_done(message: Message, state: FSMContext):
 		
 		await state.finish()
 	else:
-		await message.answer("Растояние пробега должно быть числом.\nВведите растояние пробега в км (ноль, если заявка в черте города):")
+		await message.answer("{}  Растояние пробега должно быть числом.\nВведите растояние пробега в км (ноль, если заявка в черте города):".format(emojize(":exclamation:")),
+		                     reply_markup = inline_back_to_setup())
 
 
 @dp.callback_query_handler(regexp = "^task_edit_act#.+")
 async def task_edit_distance(call: CallbackQuery, state: FSMContext):
-	await call.message.edit_text("Загрузите фотографию с актом выполненных работ, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены позднее:".format(
+	await call.message.edit_text("Загрузите фотографию с актом выполненных работ, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены:".format(
 				emojize(":paperclip:")), reply_markup = inline_back_to_setup())
 	# await call.message.answer(str(date.today()))
 	id_task = call.data.split("#")[1]
@@ -66,7 +68,7 @@ async def task_act_photo(message: Message, state: FSMContext):
 			file_id = message.document.file_id
 	
 	if file_id is None:
-		await message.answer("Загруженный файл не фотография.\nПовторите попытку!")
+		await message.answer("{}  Загруженный файл не фотография.\nПовторите попытку!".format(emojize(":exclamation:")), reply_markup = inline_back_to_setup())
 		# await message.answer("Файл с фотографией акта не загружен и не сохранён.")
 		file_path = ""
 	else:
@@ -94,7 +96,7 @@ async def task_act_photo(message: Message, state: FSMContext):
 
 @dp.callback_query_handler(regexp = "^task_edit_upd#.+")
 async def task_edit_upd(call: CallbackQuery, state: FSMContext):
-	await call.message.edit_text("Загрузите фотографию с УПД, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены позднее:".format(
+	await call.message.edit_text("Загрузите фотографию с УПД, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены:".format(
 			emojize(":paperclip:")), reply_markup = inline_back_to_setup())
 	# await call.message.answer(str(date.today()))
 	id_task = call.data.split("#")[1]
@@ -117,7 +119,7 @@ async def task_act_photo(message: Message, state: FSMContext):
 			file_id = message.document.file_id
 	
 	if file_id is None:
-		await message.answer("Загруженный файл не фотография.\nПовторите попытку!")
+		await message.answer("{}  Загруженный файл не фотография.\nПовторите попытку!".format(emojize(":exclamation:")), reply_markup = inline_back_to_setup())
 		# await message.answer("Файл с фотографией акта не загружен и не сохранён.")
 		file_path = ""
 	else:
@@ -128,7 +130,7 @@ async def task_act_photo(message: Message, state: FSMContext):
 		if is_saved:
 			# await message.answer("{}  Файл успешно сохранён и доступен по ссылке - {}".format(emojize(":white_check_mark:"), file_path), disable_web_page_preview = True)
 			enquiry = Enquiry()
-			is_done = enquiry.update_table(id = id_task, f81301 = file_path)
+			is_done = enquiry.update_table(id = id_task, f78321 = STATUS_UPD_SIGNED, f81301 = file_path)
 			if is_done:
 				await message.answer("{} УПД по заявке № <b>{}</b>, успешно загружен.".
 				                     format(emojize(":white_check_mark:"), str(id_task)), reply_markup = inline_back_to_setup())
@@ -139,6 +141,6 @@ async def task_act_photo(message: Message, state: FSMContext):
 		else:
 			await message.answer("{}  Файл не удалось сохранить.".format(emojize(":bangbang:")), reply_markup = inline_back_to_setup())
 		await state.finish()
-		await message.delete()
+		
 
 

@@ -3,6 +3,7 @@ from aiogram.types import CallbackQuery, Message, ContentType
 from aiogram.utils.emoji import emojize
 
 from data.cloud_storage import CloudStorage
+from data.config import STATUS_SETUP
 from data.enquiry import Enquiry
 from keyboards.inline.inline_act_is_missing import inline_act_is_missing
 from keyboards.inline.inline_type_request_menu import inline_type_request_menu
@@ -58,13 +59,14 @@ async def task_done_distance(message: Message, state: FSMContext):
 		full_date = "{}-{}-{} 00:00:00".format(date_year, date_month, date_day)
 		enquiry = Enquiry(message.from_user.id)
 		
-		is_done = enquiry.update_table(id = id_task, f78361 = int(distance_done), f78311 = full_date, f78321 = "Установлено")
+		is_done = enquiry.update_table(id = id_task, f78361 = int(distance_done), f78311 = full_date, f78321 = STATUS_SETUP)
 		# if is_done:
 		# 	await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлено</b>".
 		# 	                     format(emojize(":white_check_mark:"), str(id_task)))
 		# else:
 		# 	await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":hangbang:")))
-		await message.answer("Загрузите фотографию с актом проделанных работ, нажав на иконку {}, или нажмите кнопку 'Акт отсутствует', если акт будет приложен позднее:".format(
+		await message.answer("Загрузите фотографию с актом проделанных работ, нажав на иконку {}, или нажмите кнопку <b>Акт отсутствует</b>, если акт будет приложен "
+		                     "позднее:".format(
 				emojize(
 						":paperclip:")), reply_markup = inline_act_is_missing())
 		await TaskCloseInquiryState.PutActPhoto.set()
@@ -108,7 +110,7 @@ async def task_act_photo(message: Message, state: FSMContext):
 	# 	                     format(emojize(":white_check_mark:"), str(id_task)))
 	# else:
 	# 	await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":hangbang:")))
-	await message.answer("Загрузите фотографию УПД, нажав на иконку {}, или нажмите кнопку 'УПД отсутствует', если УПД будет приложен позднее:".format(
+	await message.answer("Загрузите фотографию УПД, нажав на иконку {}, или нажмите кнопку <b>УПД отсутствует</b>, если УПД будет приложен позднее:".format(
 			emojize(
 					":paperclip:")), reply_markup = inline_upd_is_missing())
 	await TaskCloseInquiryState.PutUpdPhoto.set()
@@ -117,21 +119,20 @@ async def task_act_photo(message: Message, state: FSMContext):
 @dp.callback_query_handler(regexp = "^act_is_missing", state = TaskCloseInquiryState.PutActPhoto)
 async def act_is_missing(call: CallbackQuery, state: FSMContext):
 	await TaskCloseInquiryState.PutUpdPhoto.set()
-	await call.message.answer("Загрузите фотографию УПД, нажав на иконку {}, или нажмите кнопку 'УПД отсутствует', если УПД будет приложен позднее:".format(
-			emojize(
-					":paperclip:")), reply_markup = inline_upd_is_missing())
+	await call.message.answer("Загрузите фотографию УПД, нажав на иконку {}, или нажмите кнопку <b>УПД отсутствует</b>, если УПД будет приложен позднее:".format(
+			emojize(":paperclip:")), reply_markup = inline_upd_is_missing())
 
 
-@dp.callback_query_handler(text = "upd_is_missing", state = TaskCloseInquiryState.PutUpdPhoto)
+@dp.callback_query_handler(regexp = "^upd_is_missing", state = TaskCloseInquiryState.PutUpdPhoto)
 async def act_upd_missing(call: CallbackQuery, state: FSMContext):
 	data_state = await state.get_data()
 	id_task = data_state.get("id_task")
 	# print("call.message.from_user.id = {}".format(call.message.from_user.id))
 	# print("get me = {}".format(await bot.get_me()))
 	enquiry = Enquiry()
-	is_done = enquiry.update_table(id = id_task, f78321 = "УПД подписан")
+	is_done = enquiry.update_table(id = id_task, f78321 = STATUS_SETUP)
 	if is_done:
-		await call.message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>УПД подписан</b>.\n<u>Заявка доступна к выплате.</u>".
+		await call.message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлен</b>.\nЗаявка исполнена, но не доступна к выплате.".
 		                     format(emojize(":white_check_mark:"), str(id_task)), reply_markup = inline_type_request_menu())
 	else:
 		await call.message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":bangbang:")), reply_markup = inline_type_request_menu())
@@ -155,6 +156,8 @@ async def task_upd_photo(message: Message, state: FSMContext):
 		# await message.answer("Загруженный файл не фотография.\nПовторите попытку!")
 		# await message.answer("Файл с фотографией акта не загружен и не сохранён.")
 		file_path = ""
+		await message.answer("{} Заявка № <b>{}</b>, установлена в статус - <b>Установлен</b>.\nЗаявка исполнена, но не доступна к выплате.".
+		                          format(emojize(":white_check_mark:"), str(id_task)), reply_markup = inline_type_request_menu())
 	else:
 		# await message.answer("Минутку, произвожу запись в БД...")
 		source_file = await bot.get_file(file_id)
@@ -166,11 +169,11 @@ async def task_upd_photo(message: Message, state: FSMContext):
 		# 	await message.answer("{}  Файл не удалось сохранить.".format(emojize(":hangbang:")))
 		await message.delete()
 	
-	enquiry = Enquiry(message.from_user.id)
-	is_done = enquiry.update_table(id = id_task, f78321 = "УПД подписан", f81301 = file_path)
-	if is_done:
-		await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>УПД подписан</b>.\n<u>Заявка доступна к выплате.</u>".
-		                     format(emojize(":white_check_mark:"), str(id_task)),reply_markup = inline_type_request_menu())
-	else:
-		await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":bangbang:")), reply_markup = inline_type_request_menu())
+		enquiry = Enquiry(message.from_user.id)
+		is_done = enquiry.update_table(id = id_task, f78321 = "УПД подписан", f81301 = file_path)
+		if is_done:
+			await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>УПД подписан</b>.\n<u>Заявка доступна к выплате.</u>".
+			                     format(emojize(":white_check_mark:"), str(id_task)),reply_markup = inline_type_request_menu())
+		else:
+			await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":bangbang:")), reply_markup = inline_type_request_menu())
 	await state.finish()

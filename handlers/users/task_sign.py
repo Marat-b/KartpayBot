@@ -30,4 +30,4 @@ async def task_sign(call: CallbackQuery):
 			await bot.send_message(manager, format_enquiry_for_paying(entity))
 			
 	await call.answer("Запрос на выплату в размере {} рублей по заявкам, в количестве {} шт. - отправлен".format(bonus, count_entities),
-	                  show_alert = True, cache_time = 120)
+	                  show_alert = True)  #, cache_time = 120

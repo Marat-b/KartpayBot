@@ -1,7 +1,7 @@
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.emoji import emojize
 
-button_requests = KeyboardButton('{}  Мои заявки'.format(emojize(":ledger:")))
+button_requests = KeyboardButton('{}  Мои заявки'.format(emojize(":memo:")))
 button_statistics = KeyboardButton('{}  Статистика'.format(emojize(":bar_chart:")))
 
 main_menu = ReplyKeyboardMarkup(resize_keyboard=True)

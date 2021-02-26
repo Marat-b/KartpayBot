@@ -1,3 +1,5 @@
+import logging
+
 import requests
 import json
 from data import config, access_id
@@ -61,6 +63,7 @@ class BaseEnquiry:
 			clients = [json_table['data'][record]["row"] for record in records]
 			return clients, json_table
 		except requests.exceptions.ConnectionError:
+			logging.log(1, "Connection error is occurred")
 			return list(), {"count": 0, "count_all": 0}
 	
 	def _get_user_id(self, telegram_user_id):

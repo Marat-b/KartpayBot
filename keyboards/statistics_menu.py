@@ -1,11 +1,14 @@
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.utils.emoji import emojize
 
-button_current_month = KeyboardButton('Текущий месяц')
-button_prior_month = KeyboardButton('Предыдущий месяц')
-button_back = KeyboardButton('Назад')
+from keyboards.main_menu import main_menu
 
-main_menu = ReplyKeyboardMarkup(resize_keyboard=True)
+button_current_month = KeyboardButton('{}{}  Текущий месяц'.format(emojize(":calendar:"), emojize(":arrow_right:")))
+button_prior_month = KeyboardButton('{}{}  Предыдущий месяц'.format(emojize(":arrow_left:"), emojize(":calendar:")))
+button_back = KeyboardButton('{}  Назад'.format(emojize(":leftwards_arrow_with_hook:")))
+
+statistics_menu = ReplyKeyboardMarkup(resize_keyboard=True)
 main_menu.clean()
-main_menu.row(button_current_month)
-main_menu.row(button_prior_month)
-main_menu.row(button_back)
+statistics_menu.row(button_current_month)
+statistics_menu.row(button_prior_month)
+statistics_menu.row(button_back)

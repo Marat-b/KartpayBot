@@ -26,6 +26,36 @@ class Enquiry(BaseEnquiry):
 		all_records = self._get_records(request_db)
 		return all_records
 	
+	def get_entities_for_statistics(self, type_request: str, first_date: str, end_date: str):
+		"""
+		get count entities of requests
+		:return: Number of records
+		"""
+		if self.__user_id is None:
+			return 0
+		request_db_str = config.REQUEST_FOR_COUNT_STATUS.replace("X", first_date).replace("Y", end_date)
+		# print(request_db_str)
+		request_db = json.loads(request_db_str)
+		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
+		request_db["filter"]["row"]["f78321"]["value"] = type_request
+		all_records = self._get_records(request_db)
+		return all_records
+	
+	def get_entities_for_payed(self, first_date: str, end_date: str):
+		"""
+		get payed entities of requests
+		:return: Number of records
+		"""
+		if self.__user_id is None:
+			return 0
+		request_db_str = config.REQUEST_FOR_PAYED.replace("X", first_date).replace("Y", end_date)
+		# print(request_db_str)
+		request_db = json.loads(request_db_str)
+		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
+		request_db["filter"]["row"]["f81311"]["value"] = "Да"
+		all_records = self._get_records(request_db)
+		return all_records
+	
 	def get_entities_for_paying(self, type_request, yes_no):
 		"""
 		get all entities for paying (f81311 - negative, f78321 - upd is signed)
@@ -95,11 +125,12 @@ class Enquiry(BaseEnquiry):
 if __name__ == "__main__":
 	r = Enquiry("919930316")
 	# rr = Request("*********************", "Передан инженеру")
-	clients = r.get_entities("Передан инженеру")
-	print(r.get_entities("Передан инженеру"))
+	# clients = r.get_entities("Передан инженеру")
+	# print(r.get_entities("Передан инженеру"))
+	print(r.get_count_entities_for_status("Установлено", "2021-02-01 00:00:00", "2021-02-28 23:59:59"))
 	
 	# for i, client in enumerate(clients):
 	# 	print(f"{str(i)}. Клиент = {client['f78201']}, Адрес клиента = {client['f78211']}, ID = {client['id']}, Телефон = {client['f78341']}, Статус = , "
 	# 	      f"Срок установки={client['f81181']} ")
 	#
-	print(r.update_table(f78321 = "78321", f81301 = "81301", id = "id"))
+	# print(r.update_table(f78321 = "78321", f81301 = "81301", id = "id"))

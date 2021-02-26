@@ -19,7 +19,7 @@ async def bot_start(message: Message):
 	await message.answer(f"Привет, {message.from_user.full_name}!", reply_markup = main_menu, disable_notification = True)
 
 
-@dp.message_handler(text = "Мои заявки")
+@dp.message_handler(regexp = "Мои заявки")
 async def keyboard_start(message: types.Message):
 	# await message.delete()
 	# await message.answer("Выберите тип заявки", reply_markup = inline_type_request_menu(), disable_notification = True)

@@ -1,7 +1,9 @@
 from aiogram.utils.markdown import bold, hcode
 
 
-def format_enquiry(state_name, enquiry):
+def format_enquiry(enquiry):
+	if len(enquiry) == 0:
+		return "Данных нет"
 	formatted_enquiry = [
 		'<code>Заявка со статусом:</code> <i>{}</i>'.format(enquiry['f78321']),
 		'',
@@ -17,6 +19,8 @@ def format_enquiry(state_name, enquiry):
 
 
 def format_enquiry_for_paying(enquiry):
+	if len(enquiry) == 0:
+		return "Данных нет"
 	formatted_enquiry_for_paying = [
 		'<code>Заявка со статусом:</code> <i>{}</i>'.format(enquiry['f78321']),
 		'',

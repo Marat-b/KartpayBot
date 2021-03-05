@@ -26,32 +26,33 @@ class Enquiry(BaseEnquiry):
 		all_records = self._get_records(request_db)
 		return all_records
 	
-	def get_entities_for_statistics(self, type_request: str, first_date: str, end_date: str):
+	def get_entities_for_statistics(self, type_request: str):
 		"""
 		get count entities of requests
 		:return: Number of records
 		"""
 		if self.__user_id is None:
 			return 0
-		request_db_str = config.REQUEST_FOR_COUNT_STATUS.replace("X", first_date).replace("Y", end_date)
-		# print(request_db_str)
-		request_db = json.loads(request_db_str)
+		# request_db_str = config.REQUEST_FOR_COUNT_STATUS.replace("X", first_date).replace("Y", end_date)
+		request_db = config.REQUEST_FOR_COUNT_STATUS.copy()
 		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
 		request_db["filter"]["row"]["f78321"]["value"] = type_request
 		request_db["filter"]["row"]["f81311"]["value"] = "Нет"
+		# print(request_db)
 		all_records = self._get_records(request_db)
 		return all_records
 	
-	def get_entities_for_payed(self, first_date: str, end_date: str):
+	def get_entities_for_payed(self):
 		"""
 		get payed entities of requests
 		:return: Number of records
 		"""
 		if self.__user_id is None:
 			return 0
-		request_db_str = config.REQUEST_FOR_PAYED.replace("X", first_date).replace("Y", end_date)
+		# request_db_str = config.REQUEST_FOR_PAYED.replace("X", first_date).replace("Y", end_date)
 		# print(request_db_str)
-		request_db = json.loads(request_db_str)
+		# request_db = json.loads(request_db_str)
+		request_db = config.REQUEST_FOR_PAYED.copy()
 		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
 		request_db["filter"]["row"]["f81311"]["value"] = "Да"
 		all_records = self._get_records(request_db)
@@ -126,7 +127,10 @@ if __name__ == "__main__":
 	# rr = Request("*********************", "Передан инженеру")
 	# clients = r.get_entities("Передан инженеру")
 	# print(r.get_entities("Передан инженеру"))
-	print(r.get_count_entities_for_status("Установлено", "2021-02-01 00:00:00", "2021-02-28 23:59:59"))
+	# print(r.get_entities_for_statistics("Установлено", "2021-02-01 00:00:00", "2021-02-28 23:59:59"))
+	# print(r.get_entities_for_statistics("Установлено", "2021-03-01 00:00:01", "2021-03-31 23:59:59"))
+	print(r.get_entities_for_statistics("Установлено"))
+	print((r.get_entities_for_payed()))
 	
 	# for i, client in enumerate(clients):
 	# 	print(f"{str(i)}. Клиент = {client['f78201']}, Адрес клиента = {client['f78211']}, ID = {client['id']}, Телефон = {client['f78341']}, Статус = , "

@@ -15,11 +15,11 @@ from utils.format_enquiry import format_enquiry_for_paying
 
 @dp.callback_query_handler(regexp = '(^page\#\d|^assigned_to|^setup)', state = "*")
 async def callback_paginator(call: CallbackQuery, state: FSMContext):
-	print(f'callback_paginator -> {str(call.from_user.id)}')
+	# print(f'callback_paginator -> {str(call.from_user.id)}')
 	await state.reset_state(with_data = False)
 	call_data = call.data
 	state_name = ""
-	print(f"call_data = {call_data}")
+	# print(f"call_data = {call_data}")
 	
 	if call_data == 'assigned_to' or call_data == 'setup':
 		page = 1
@@ -33,7 +33,7 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 		await state.update_data(request_data = entities, state_name = state_name, call_data = call_data)
 		data_state = await state.get_data()
 		request_data = data_state.get("request_data")
-		print(f"request_data = {request_data}")
+		# print(f"request_data = {request_data}")
 	else:
 		data_state = await state.get_data()
 		request_data = data_state.get("request_data")
@@ -66,11 +66,11 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(regexp = '(^page\&\d|^signed)', state = "*")
 async def callback_paginator_for_paying(call: CallbackQuery, state: FSMContext):
-	print(f'callback_paginator  for paying -> {str(call.from_user.id)}')
+	# print(f'callback_paginator  for paying -> {str(call.from_user.id)}')
 	await state.reset_state(with_data = False)
 	call_data = call.data
 	state_name = ""
-	print(f"call_data = {call_data}")
+	# print(f"call_data = {call_data}")
 	if call_data == 'signed':
 		page = 1
 		state_name = get_state_name(str(call_data))
@@ -80,13 +80,13 @@ async def callback_paginator_for_paying(call: CallbackQuery, state: FSMContext):
 		await state.update_data(request_data = entities, state_name = state_name, call_data = call_data)
 		data_state = await state.get_data()
 		request_data = data_state.get("request_data")
-		print(f"request_data = {request_data}")
+		# print(f"request_data = {request_data}")
 	else:
 		data_state = await state.get_data()
 		request_data = data_state.get("request_data")
-		print(f"request_data = {request_data}")
+		# print(f"request_data = {request_data}")
 		page = int(call.data.split('&')[1])
-	print(f'page={str(page)}')
+	# print(f'page={str(page)}')
 	paginator = InlineKeyboardPaginator(
 			0 if request_data is None else len(request_data),
 			current_page = int(page),

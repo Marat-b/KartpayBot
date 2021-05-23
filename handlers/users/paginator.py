@@ -25,6 +25,7 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 		page = 1
 		state_name = get_state_name(str(call_data))
 		enquiries = Enquiry(call.from_user.id)
+		# enquiries = Enquiry('1771817746')
 		# fetching data from DB
 		entities = enquiries.get_entities(state_name)
 		if call_data == "assigned_to":

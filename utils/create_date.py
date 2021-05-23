@@ -29,6 +29,21 @@ def get_year_month(arg_date = datetime.today(), last_month = False) -> (int, int
 			year -= 1
 			month = 12
 	return year, month
+
+def get_date_DMY() -> str:
+	"""
+	
+	:return: date in format dd.mm.yyyy
+	"""
+	current_date = datetime.today()
+	year = current_date.year
+	month = current_date.month
+	month = str(month) if len(str(month)) == 2 else "0{}".format(str(month))
+	day = current_date.day
+	day = str(day) if len(str(day)) == 2 else "0{}".format(str(day))
+	current_date = '{}.{}.{}'.format(day, month, year)
+	return current_date
+	
 	
 
 
@@ -37,6 +52,7 @@ if __name__ == "__main__":
 	# print(create_date())
 	# print(create_date(last_month = False))
 	# print(create_date(last_month = True))
-	print(get_year_month())
-	print(get_year_month(last_month = False))
-	print(get_year_month(last_month = True))
+	# print(get_year_month())
+	# print(get_year_month(last_month = False))
+	# print(get_year_month(last_month = True))
+	print(get_date_DMY())

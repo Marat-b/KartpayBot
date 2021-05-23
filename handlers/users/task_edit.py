@@ -14,9 +14,10 @@ from utils.create_filename import create_filename
 
 @dp.callback_query_handler(regexp = "^task_edit_distance#.+")
 async def task_edit_distance(call: CallbackQuery, state: FSMContext):
-	await call.message.edit_text("Введите растояние пробега в км (ноль, если заявка в черте города):")
-	# await call.message.answer(str(date.today()))
 	id_task = call.data.split("#")[1]
+	await call.message.edit_text("Заявка № <b>{}</b>\nВведите растояние пробега в км (ноль, если заявка в черте города):".format(id_task))
+	# await call.message.answer(str(date.today()))
+	
 	await state.update_data(id_task = id_task)
 	await TaskEditState.PutDistance.set()
 
@@ -32,10 +33,10 @@ async def task_edit_distance_done(message: Message, state: FSMContext):
 		
 		is_done = enquiry.update_table(id = id_task, f78361 = int(distance_done))
 		if is_done:
-			await message.answer("{} Пробег по заявке № <b>{}</b> успешно отредактирован".format(emojize(":white_check_mark:"), str(id_task)),
+			await message.answer("Заявка № <b>{}</b>\n{} Пробег по заявке № <b>{}</b> успешно отредактирован".format(id_task, emojize(":white_check_mark:"), str(id_task)),
 			                     reply_markup = inline_back_to_setup())
 		else:
-			await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":hangbang:")))
+			await message.answer("Заявка № <b>{}</b>\n{} Запись в БД завершилось ошибкой!".format(id_task, emojize(":hangbang:")))
 		
 		await state.finish()
 	else:
@@ -45,10 +46,13 @@ async def task_edit_distance_done(message: Message, state: FSMContext):
 
 @dp.callback_query_handler(regexp = "^task_edit_act#.+")
 async def task_edit_distance(call: CallbackQuery, state: FSMContext):
-	await call.message.edit_text("Загрузите фотографию с актом выполненных работ, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены:".format(
-				emojize(":paperclip:")), reply_markup = inline_back_to_setup())
-	# await call.message.answer(str(date.today()))
 	id_task = call.data.split("#")[1]
+	await call.message.edit_text("Заявка № <b>{}</b>\nЗагрузите фотографию с актом выполненных работ, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены:".format(id_task,
+	                                                                                                                                                                   emojize(
+		                                                                                                                                                                   ":paperclip:")),
+	                             reply_markup = inline_back_to_setup())
+	# await call.message.answer(str(date.today()))
+	
 	await state.update_data(id_task = id_task)
 	await TaskEditState.PutActPhoto.set()
 
@@ -68,7 +72,8 @@ async def task_act_photo(message: Message, state: FSMContext):
 			file_id = message.document.file_id
 	
 	if file_id is None:
-		await message.answer("{}  Загруженный файл не фотография.\nПовторите попытку!".format(emojize(":exclamation:")), reply_markup = inline_back_to_setup())
+		await message.answer("Заявка № <b>{}</b>\n{}  Загруженный файл не фотография.\nПовторите попытку!".format(id_task, emojize(":exclamation:")), reply_markup =
+		inline_back_to_setup())
 		# await message.answer("Файл с фотографией акта не загружен и не сохранён.")
 		file_path = ""
 	else:
@@ -83,23 +88,25 @@ async def task_act_photo(message: Message, state: FSMContext):
 			if is_done:
 				await message.answer("{} Акт выполненных работ по заявке № <b>{}</b>, успешно загружен.".
 				                     format(emojize(":white_check_mark:"), str(id_task)), reply_markup = inline_back_to_setup())
-				
+			
 			else:
-				await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":bangbang:")), reply_markup = inline_back_to_setup())
+				await message.answer("Заявка № <b>{}</b>\n{} Запись в БД завершилось ошибкой!".format(id_task, emojize(":bangbang:")), reply_markup = inline_back_to_setup())
 		
 		else:
-			await message.answer("{}  Файл не удалось сохранить.".format(emojize(":bangbang:")), reply_markup = inline_back_to_setup())
+			await message.answer("Заявка № <b>{}</b>\n{}  Файл не удалось сохранить.".format(id_task, emojize(":bangbang:")), reply_markup = inline_back_to_setup())
 		await state.finish()
 		await message.delete()
-	
+
+
 ################## Task UPD #########################################
 
 @dp.callback_query_handler(regexp = "^task_edit_upd#.+")
 async def task_edit_upd(call: CallbackQuery, state: FSMContext):
-	await call.message.edit_text("Загрузите фотографию с УПД, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены:".format(
+	id_task = call.data.split("#")[1]
+	await call.message.edit_text("Заявка № <b>{}</b>\nЗагрузите фотографию с УПД, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены:".format(id_task,
 			emojize(":paperclip:")), reply_markup = inline_back_to_setup())
 	# await call.message.answer(str(date.today()))
-	id_task = call.data.split("#")[1]
+	
 	await state.update_data(id_task = id_task)
 	await TaskEditState.PutUpdPhoto.set()
 
@@ -119,7 +126,8 @@ async def task_act_photo(message: Message, state: FSMContext):
 			file_id = message.document.file_id
 	
 	if file_id is None:
-		await message.answer("{}  Загруженный файл не фотография.\nПовторите попытку!".format(emojize(":exclamation:")), reply_markup = inline_back_to_setup())
+		await message.answer("Заявка № <b>{}</b>\n{}  Загруженный файл не фотография.\nПовторите попытку!".format(id_task, emojize(":exclamation:")), reply_markup =
+		inline_back_to_setup())
 		# await message.answer("Файл с фотографией акта не загружен и не сохранён.")
 		file_path = ""
 	else:
@@ -136,11 +144,8 @@ async def task_act_photo(message: Message, state: FSMContext):
 				                     format(emojize(":white_check_mark:"), str(id_task)), reply_markup = inline_back_to_setup())
 			
 			else:
-				await message.answer("{} Запись в БД завершилось ошибкой!".format(emojize(":bangbang:")), reply_markup = inline_back_to_setup())
+				await message.answer("Заявка № <b>{}</b>\n{} Запись в БД завершилось ошибкой!".format(id_task, emojize(":bangbang:")), reply_markup = inline_back_to_setup())
 		
 		else:
-			await message.answer("{}  Файл не удалось сохранить.".format(emojize(":bangbang:")), reply_markup = inline_back_to_setup())
+			await message.answer("Заявка № <b>{}</b>\n{}  Файл не удалось сохранить.".format(id_task, emojize(":bangbang:")), reply_markup = inline_back_to_setup())
 		await state.finish()
-		
-
-

@@ -8,6 +8,7 @@ async def task_to_plan_put_date(current_date, message, state):
 	data_state = await state.get_data()
 	id_task = data_state.get("id_task")
 	date_full = str(current_date).split(".")
+	await message.delete()
 	if len(date_full) == 3:
 		if date_full[0].isdigit() and date_full[1].isdigit() and date_full[2].isdigit() and len(date_full[0]) == 2 and len(date_full[1]) == 2 and len(date_full[2]) == 4:
 			# print("date_full[1] = {}".format(len(date_full[1])))

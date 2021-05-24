@@ -2,6 +2,11 @@ from aiogram.utils.markdown import bold, hcode
 
 
 def format_enquiry(enquiry):
+	"""
+	Formatted message about inquiry
+	:param enquiry: enquiry
+	:return: formatted message
+	"""
 	if len(enquiry) == 0:
 		return "Данных нет"
 	formatted_enquiry = [
@@ -19,6 +24,11 @@ def format_enquiry(enquiry):
 
 
 def format_enquiry_for_paying(enquiry):
+	"""
+		Formatted message about inquiry
+		:param enquiry: enquiry
+		:return: formatted message
+		"""
 	if len(enquiry) == 0:
 		return "Данных нет"
 	formatted_enquiry_for_paying = [

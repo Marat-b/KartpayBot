@@ -1,5 +1,6 @@
 import sys
 
+from aiogram.utils.emoji import emojize
 from environs import Env
 import json
 # import locale
@@ -34,6 +35,7 @@ URL_READ_TABLE = env.str("url_read_table")
 URL_UPDATE_TABLE = env.str("url_update_table")
 # print(env.str("request_db"))
 REQUEST_DB = json.loads(env.str("request_db"))
+REQUEST_BY_ID = json.loads(env.str("request_by_id"))
 REQUEST_FOR_PAYING = json.loads(env.str("request_for_paying"))
 REQUEST_FOR_COUNT_STATUS = json.loads(env.str("request_for_count_status"))
 REQUEST_FOR_PAYED = json.loads(env.str("request_for_payed"))
@@ -48,4 +50,5 @@ STATUS_ASSIGNED = env.str("STATUS_ASSIGNED").encode('cp1251').decode('utf-8')
 
 TEST = env.str("TEST").encode('cp1251').decode('utf-8')
 # print(sys.getwindowsversion())
-
+main_title = '{}Внимание{} При работе с одной заявкой, выбрав операцию с ней, доведите ёё до конца. Далее можно переходить к работе с другой заявкой.\n'\
+		.format(emojize(':heavy_exclamation_mark:'), emojize(':heavy_exclamation_mark:'))

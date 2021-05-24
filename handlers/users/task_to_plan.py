@@ -11,6 +11,8 @@ from states.task_to_plan_state import TaskToPlanState
 ##############################################################
 ########## Запланировать ####################################
 #############################################################
+from utils import format_enquiry
+from utils.choice_request_buttons import choice_request_buttons
 from utils.create_date import get_date_DMY
 from utils.task_to_plan.task_to_plan_utils import task_to_plan_put_date
 
@@ -18,7 +20,15 @@ from utils.task_to_plan.task_to_plan_utils import task_to_plan_put_date
 @dp.callback_query_handler(regexp = "^task_to_plan#.+")
 async def task_done_start(call: CallbackQuery, state: FSMContext):
 	# print(f"task_done_start -> call.data = {call.data}")
+	# await call.message.delete()
+	# enquiries = Enquiry(call.from_user.id)
+	# Get ID task
 	id_task = call.data.split("#")[1]
+	# Get inquiry's entity by ID task
+	# entity = enquiries.get_entity_by_id(id_task)
+	# print(f'task_done_start -> entity={entity[0]}')
+	# Show information about inquiry
+	# await call.message.answer(format_enquiry(entity[0]))
 	current_date = get_date_DMY()
 	await state.update_data(id_task = id_task)
 	await call.message.answer("Заявка № <b>{}</b>\nВведите плановую дату исполнения в формате дд.мм.гггг, "
@@ -49,6 +59,13 @@ async def current_date_button_was_pressed(call: CallbackQuery, callback_data: di
 	await task_to_plan_put_date(current_date, call.message, state)
 
 
+@dp.callback_query_handler(cb_current_date.filter(button_name = 'button_back'), state = TaskToPlanState.PutDate)
+async def back_button_was_pressed(call: CallbackQuery, state: FSMContext):
+	await call.answer(cache_time = 60)
+	# await call.message.delete()
+	await choice_request_buttons(call.message)
+
+
 @dp.message_handler(state = TaskToPlanState.PutDate)
 async def task_done_date(message: Message, state: FSMContext):
 	# await message.answer(f"Data = {message.text}")
@@ -60,6 +77,7 @@ async def task_done_date(message: Message, state: FSMContext):
 	# current_date = data_state.get("current_date")
 	# print(f'task_done_date -> current_date={current_date}')
 	date_done = str(message.text)
-	
-	await message.delete()  # delete message from user (green color)
+	# await message.delete_reply_markup()
+	# await message.delete()  # delete message from user (green color)
+	# await message.delete()
 	await task_to_plan_put_date(date_done, message, state)

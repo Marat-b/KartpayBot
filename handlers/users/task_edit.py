@@ -12,10 +12,15 @@ from states.task_edit_state import TaskEditState
 from utils.create_filename import create_filename
 
 
+########################################################
+################ Установлено ##########################
+#######################################################
+
+
 @dp.callback_query_handler(regexp = "^task_edit_distance#.+")
 async def task_edit_distance(call: CallbackQuery, state: FSMContext):
 	id_task = call.data.split("#")[1]
-	await call.message.edit_text("Заявка № <b>{}</b>\nВведите растояние пробега в км (ноль, если заявка в черте города):".format(id_task))
+	await call.message.edit_text("Заявка № <b>{}</b>\nВведите растояние пробега в км (ноль, если заявка в черте города):".format(id_task), reply_markup = inline_back_to_setup())
 	# await call.message.answer(str(date.today()))
 	
 	await state.update_data(id_task = id_task)
@@ -48,8 +53,8 @@ async def task_edit_distance_done(message: Message, state: FSMContext):
 async def task_edit_distance(call: CallbackQuery, state: FSMContext):
 	id_task = call.data.split("#")[1]
 	await call.message.edit_text("Заявка № <b>{}</b>\nЗагрузите фотографию с актом выполненных работ, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены:".format(id_task,
-	                                                                                                                                                                   emojize(
-		                                                                                                                                                                   ":paperclip:")),
+	                                                                                                                                                                      emojize(
+			                                                                                                                                                                      ":paperclip:")),
 	                             reply_markup = inline_back_to_setup())
 	# await call.message.answer(str(date.today()))
 	
@@ -104,7 +109,8 @@ async def task_act_photo(message: Message, state: FSMContext):
 async def task_edit_upd(call: CallbackQuery, state: FSMContext):
 	id_task = call.data.split("#")[1]
 	await call.message.edit_text("Заявка № <b>{}</b>\nЗагрузите фотографию с УПД, нажав на иконку {}, или нажмите кнопку 'Назад', для отмены:".format(id_task,
-			emojize(":paperclip:")), reply_markup = inline_back_to_setup())
+	                                                                                                                                                  emojize(":paperclip:")),
+	                             reply_markup = inline_back_to_setup())
 	# await call.message.answer(str(date.today()))
 	
 	await state.update_data(id_task = id_task)

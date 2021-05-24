@@ -72,6 +72,20 @@ class Enquiry(BaseEnquiry):
 		all_records = self._get_records(request_db)
 		return all_records
 	
+	def get_entity_by_id(self, id_entity):
+		"""
+		Get information's entity by ID's entity
+		:param id_entity: ID entity
+		:return: record of information's entity
+		"""
+		if self.__user_id is None:
+			return 0
+		request_db = config.REQUEST_BY_ID.copy()
+		request_db["filter"]["row"]["f79831"]["value"] = self.__user_id
+		request_db["filter"]["row"]["id"]["value"] = id_entity
+		all_records = self._get_records(request_db)
+		return all_records
+	
 	def update_act(self, **kwargs):
 		"""
 		Update record with status
@@ -120,6 +134,8 @@ class Enquiry(BaseEnquiry):
 			return True
 		else:
 			return False
+		
+	
 
 
 if __name__ == "__main__":
@@ -131,6 +147,7 @@ if __name__ == "__main__":
 	# print(r.get_entities_for_statistics("Установлено", "2021-03-01 00:00:01", "2021-03-31 23:59:59"))
 	print(r.get_entities_for_statistics("Установлено"))
 	print((r.get_entities_for_payed()))
+	print(r.get_entity_by_id("1100"))
 	
 	# for i, client in enumerate(clients):
 	# 	print(f"{str(i)}. Клиент = {client['f78201']}, Адрес клиента = {client['f78211']}, ID = {client['id']}, Телефон = {client['f78341']}, Статус = , "

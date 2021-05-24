@@ -6,54 +6,63 @@ from data.cloud_storage import CloudStorage
 from data.config import STATUS_SETUP
 from data.enquiry import Enquiry
 from keyboards.inline.inline_act_is_missing import inline_act_is_missing
+from keyboards.inline.inline_current_date import cb_current_date, inline_current_date
 from keyboards.inline.inline_type_request_menu import inline_type_request_menu
 from keyboards.inline.inline_upd_is_missing import inline_upd_is_missing
 from loader import dp, bot
 from states.task_close_inquire_state import TaskCloseInquiryState
+from utils.create_date import get_date_DMY
 from utils.create_filename import create_filename
 
 
 ##################################################################
 ############### Закрыть заявку ###################################
 ##################################################################
+from utils.task_close_inquiry.task_close_inquiry_utils import task_close_inquiry_put_date
+
 
 @dp.callback_query_handler(regexp = "^task_close_inquire#.+")
 async def task_done_start(call: CallbackQuery, state: FSMContext):
 	# print(f"task_done_start -> call.data = {call.data}")
 	id_task = call.data.split("#")[1]
-	await call.message.edit_text("Заявка № <b>{}</b>\nВведите дату установки в формате дд.мм.гггг:".format(id_task))
+	current_date = get_date_DMY()
+	await call.message.edit_text("Заявка № <b>{}</b>\nВведите дату установки в формате дд.мм.гггг,"
+	                             "или нажмите кнопку для ввода текущей даты.".format(id_task), reply_markup = inline_current_date(current_date))
 	
 	await state.update_data(id_task = id_task)
 	await TaskCloseInquiryState.PutDate.set()
 
 
+@dp.callback_query_handler(cb_current_date.filter(button_name = 'button_current_date'), state = TaskCloseInquiryState.PutDate)
+async def current_date_was_pressed(call: CallbackQuery, callback_data: dict, state: FSMContext):
+	"""
+	If user pressed button 'Current date' instead to put date manually
+	:param call:
+	:param callback_data:
+	:param state:
+	:return:
+	"""
+	await call.answer(cache_time = 60)
+	# , callback_data: dict, state: FSMContext
+	# print(f'call.data={call.data}')
+	# print(f'callback_data={callback_data}')
+	current_date = callback_data.get('current_date')
+	await state.update_data(current_date = current_date)
+	await task_close_inquiry_put_date(current_date, call.message, state, TaskCloseInquiryState)
+
+
+# await TaskToPlanState.PutDate.set()
+# await call.message.answer(f'Дата установлена в {current_date}')
+
+
 @dp.message_handler(state = TaskCloseInquiryState.PutDate)
 async def task_done_date(message: Message, state: FSMContext):
 	# await message.answer(f"Data = {message.text}")
-	data_state = await state.get_data()
-	id_task = data_state.get("id_task")
+	
 	date_done = str(message.text)
-	date_full = str(date_done).split(".")
+	await task_close_inquiry_put_date(date_done, message, state, TaskCloseInquiryState)
 	# print(len(date_full))
-	if len(date_full) == 3:
-		if date_full[0].isdigit() and date_full[1].isdigit() and date_full[2].isdigit() and len(date_full[0]) == 2 and len(date_full[1]) == 2 and len(date_full[2]) == 4:
-			# print("date_full[1] = {}".format(len(date_full[1])))
-			date_day = date_full[0]
-			date_month = date_full[1]
-			date_year = date_full[2]
-			await state.update_data(date_day = date_day, date_month = date_month, date_year = date_year)
-			await message.answer("Заявка № <b>{}</b>\nВведите растояние пробега в км (ноль, если заявка в черте города):".format(id_task))
-			await TaskCloseInquiryState.PutDistance.set()
-		# await state.finish()
-		else:
-			await message.answer("Заявка № <b>{}</b>\n"
-			                     "{}  Вы ввели неверную дату, дата должна содержать только цифры.\n"
-			                     "Введите плановую дату установки оборудования в формате дд.мм.гггг:".format(id_task, emojize(
-					":exclamation:")))
-	else:
-		await message.answer("Заявка № <b>{}</b>\n{}  Вы ввели неверную дату, пожалуйста,"
-		                     " введите плановую дату установки оборудования в формате дд.мм.гггг:".format(id_task, emojize(":exclamation:")))
-
+	
 
 @dp.message_handler(state = TaskCloseInquiryState.PutDistance)
 async def task_done_distance(message: Message, state: FSMContext):

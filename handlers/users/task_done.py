@@ -13,6 +13,8 @@ from data.enquiry import Enquiry
 from data.cloud_storage import CloudStorage
 
 
+################# Не участвует в процессе ##############################
+
 @dp.callback_query_handler(regexp = "^task_trip_planned#.+")
 async def task_done_start(call: CallbackQuery, state: FSMContext):
 	# print("-> task_done call.data = {}".format(call.data))
@@ -56,7 +58,7 @@ async def task_done_distance(message: types.Message, state: FSMContext):
 	if distance_done.isdigit():
 		await state.update_data(distance = distance_done)
 		await message.answer("Заявка № <b>{}</b>\nЗагрузите фотографию с актом проделанных работ, нажав на иконку {},"
-		                     " или неберите слово 'нет', если акта нет:".format(id_task,emojize(":paperclip:")))
+		                     " или неберите слово 'нет', если акта нет:".format(id_task, emojize(":paperclip:")))
 		await TaskDoneState.PutPhoto.set()
 	# await state.finish()
 	else:

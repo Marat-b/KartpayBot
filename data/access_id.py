@@ -20,7 +20,7 @@ class Auth:
 			else:
 				return None
 		except requests.exceptions.ConnectionError:
-			# print("exception _get_salt")
+			print("exception _get_salt")
 			return None
 	
 	@classmethod
@@ -42,5 +42,5 @@ class Auth:
 			else:
 				return None
 		except requests.exceptions.ConnectionError:
-			# print("exception _get_access_id")
+			print("exception _get_access_id")
 			return None

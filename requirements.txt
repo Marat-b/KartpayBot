@@ -1,5 +1,6 @@
-aiogram>=2.11.2,<3.0
+aiogram>=2.11.2,<=2.20
 environs~=8.0.0
 python-telegram-bot-pagination
 yadisk
-emoji
+emoji==1.2.0
+requests

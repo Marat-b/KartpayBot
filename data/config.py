@@ -43,12 +43,13 @@ REQUEST_TABLE_TELEGRAMUSER = json.loads(env.str("request_table_telegramuser"))
 UPDATE_TABLE_ACT = json.loads(env.str("update_table_act"))
 UPDATE_TABLE_UPD = json.loads(env.str("update_table_upd"))
 
-STATUS_SETUP = env.str("STATUS_SETUP").encode('cp1251').decode('utf-8')
-STATUS_UPD_SIGNED = env.str("STATUS_UPD_SIGNED").encode('cp1251').decode('utf-8')
-STATUS_PLANNED = env.str("STATUS_PLANNED").encode('cp1251').decode('utf-8')
-STATUS_ASSIGNED = env.str("STATUS_ASSIGNED").encode('cp1251').decode('utf-8')
+STATUS_SETUP = env.str("STATUS_SETUP") #.encode('cp1251').decode('utf-8')
+STATUS_UPD_SIGNED = env.str("STATUS_UPD_SIGNED") #.encode('cp1251').decode('utf-8')
+STATUS_PLANNED = env.str("STATUS_PLANNED") #.encode('cp1251').decode('utf-8')
+STATUS_ASSIGNED = env.str("STATUS_ASSIGNED") #.encode('cp1251').decode('utf-8')
 
-TEST = env.str("TEST").encode('cp1251').decode('utf-8')
+TEST = env.str("TEST") #.encode('cp1251').decode('utf-8')
 # print(sys.getwindowsversion())
-main_title = '{}Внимание{} При работе с одной заявкой, выбрав операцию с ней, доведите ёё до конца. Далее можно переходить к работе с другой заявкой.\n'\
+main_title = ('{}Внимание{} При работе с одной заявкой, выбрав операцию с ней, доведите её до конца. Далее можно '
+			  'переходить к работе с другой заявкой.\n')\
 		.format(emojize(':heavy_exclamation_mark:'), emojize(':heavy_exclamation_mark:'))

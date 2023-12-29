@@ -146,7 +146,7 @@ class Enquiry(BaseEnquiry):
 
 
 if __name__ == "__main__":
-	r = Enquiry("147166708")
+	r = Enquiry("")
 	# rr = Request("*********************", "Передан инженеру")
 	# clients = r.get_entities("Передан инженеру")
 	# print(r.get_entities("Передан инженеру"))

@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  bot:
+    container_name: kartpaybot
+    image: buran17/kartpaybot
+    build:
+      context: .
+    command: python app.py
+    restart: always
+    networks:
+      - botnet
+    env_file:
+      - ".env"
+   
+networks:
+  botnet:
+    # указывается драйвер сети
+    driver: bridge

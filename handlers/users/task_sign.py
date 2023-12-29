@@ -1,6 +1,6 @@
 from aiogram.types import CallbackQuery
 
-from data.config import MANAGERS
+from data.config import MANAGERS, f_application_total, f_executor
 from data.enquiry import Enquiry
 from loader import dp, bot
 from utils.format_enquiry import format_enquiry_for_paying
@@ -16,11 +16,11 @@ async def task_sign(call: CallbackQuery):
 	bonus = 0
 	count_entities = 0
 	for entity in entities:
-		bonus += int(entity["f81291"])
+		bonus += int(entity[f_application_total])
 		count_entities += 1
 	# print("entities = {}".format(entities))
 	# print("bonus = {}".format(bonus))
-	summary_message = "Исполнитель <b>{}</b> запросил выплату в размере <b>{}</b> рублей по следующим заявкам, в количестве <b>{}</b> шт.".format(entities[0]["f79831"], bonus,
+	summary_message = "Исполнитель <b>{}</b> запросил выплату в размере <b>{}</b> рублей по следующим заявкам, в количестве <b>{}</b> шт.".format(entities[0][f_executor], bonus,
 	                                                                                                                                  count_entities)
 	
 	for manager in MANAGERS:

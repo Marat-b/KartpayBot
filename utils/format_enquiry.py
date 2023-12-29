@@ -1,5 +1,10 @@
 from aiogram.utils.markdown import bold, hcode
 
+from data.config import f_act_photo, f_client, f_delivery, f_execution_date, f_id, f_mileage, f_paid_to_performer, \
+	f_phone, f_point_address, \
+	f_status, \
+	f_target_date, f_upd_photo
+
 
 def format_enquiry(enquiry):
 	"""
@@ -10,15 +15,15 @@ def format_enquiry(enquiry):
 	if len(enquiry) == 0:
 		return "Данных нет"
 	formatted_enquiry = [
-		'<code>Заявка со статусом:</code> <i>{}</i>'.format(enquiry['f78321']),
+		'<code>Заявка со статусом:</code> <i>{}</i>'.format(enquiry[f_status]),
 		'',
-		'<i>Номер заявки: {}</i>'.format(enquiry["id"]),
-		'Клиент: <b>{}</b>'.format(enquiry['f78201']),
-		'Адрес: {}'.format(enquiry['f78211']),
-		'Телефон: {}'.format(enquiry['f78341']),
-		'Дата исполнения: {}'.format(hcode(enquiry['f78311'])),
-		'Срок установки: {}'.format(hcode(enquiry['f81181'])),
-		'Доставка: {}'.format(enquiry['f79841'])
+		'<i>Номер заявки: {}</i>'.format(enquiry[f_id]),
+		'Клиент: <b>{}</b>'.format(enquiry[f_client]),
+		'Адрес: {}'.format(enquiry[f_point_address]),
+		'Телефон: {}'.format(enquiry[f_phone]),
+		'Дата исполнения: {}'.format(hcode(enquiry[f_execution_date])),
+		'Срок установки: {}'.format(hcode(enquiry[f_target_date])),
+		'Доставка: {}'.format(enquiry[f_delivery])
 	]
 	return '\n'.join(formatted_enquiry)
 
@@ -32,19 +37,19 @@ def format_enquiry_for_paying(enquiry):
 	if len(enquiry) == 0:
 		return "Данных нет"
 	formatted_enquiry_for_paying = [
-		'<code>Заявка со статусом:</code> <i>{}</i>'.format(enquiry['f78321']),
+		'<code>Заявка со статусом:</code> <i>{}</i>'.format(enquiry[f_status]),
 		'',
-		'<i>Номер заявки: {}</i>'.format(enquiry["id"]),
-		'Клиент: <b>{}</b>'.format(enquiry['f78201']),
-		'Адрес: {}'.format(enquiry['f78211']),
-		'Дата исполнения: {}'.format(hcode(enquiry['f78311'])),
-		'Срок установки: {}'.format(hcode(enquiry['f81181'])),
-		"Пробег: {}  км".format(enquiry["f78361"]),
-		"Акт по заявке: {}".format("Да" if len(str(enquiry["f81381"]).strip()) > 0 else "Нет"),
-		"УПД по заявке: {}".format("Да" if len(str(enquiry["f81301"]).strip()) > 0 else "Нет"),
-		"Заявка оплачена: {}".format(enquiry["f81311"]),
-		"Вознаграждение по заявке: {} руб".format(enquiry["f81291"])
-		# 'Телефон: {}'.format(enquiry['f78341']),
-		# 'Доставка: {}'.format(enquiry['f79841'])
+		'<i>Номер заявки: {}</i>'.format(enquiry[f_id]),
+		'Клиент: <b>{}</b>'.format(enquiry[f_client]),
+		'Адрес: {}'.format(enquiry[f_point_address]),
+		'Дата исполнения: {}'.format(hcode(enquiry[f_execution_date])),
+		'Срок установки: {}'.format(hcode(enquiry[f_target_date])),
+		"Пробег: {}  км".format(enquiry[f_mileage]),
+		"Акт по заявке: {}".format("Да" if len(str(enquiry[f_act_photo]).strip()) > 0 else "Нет"),
+		"УПД по заявке: {}".format("Да" if len(str(enquiry[f_upd_photo]).strip()) > 0 else "Нет"),
+		"Заявка оплачена: {}".format(enquiry[f_paid_to_performer]),
+		# "Вознаграждение по заявке: {} руб".format(enquiry["f81291"])
+		# 'Телефон: {}'.format(enquiry[f_phone]),
+		# 'Доставка: {}'.format(enquiry[f_delivery])
 	]
 	return '\n'.join(formatted_enquiry_for_paying)

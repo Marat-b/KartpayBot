@@ -3,7 +3,7 @@ from datetime import datetime
 from aiogram.types import Message
 from aiogram.utils.emoji import emojize
 
-from data.config import STATUS_SETUP, STATUS_UPD_SIGNED
+from data.config import STATUS_SETUP, STATUS_UPD_SIGNED, f_application_total, f_execution_date
 from data.enquiry import Enquiry
 from keyboards.main_menu import main_menu
 from keyboards.statistics_menu import statistics_menu
@@ -36,6 +36,8 @@ async def statistics(message: Message, last_month = False):
 	# print(f"statistics_current_month -> {message.from_user.id}")
 	# print(f"statistics_current_month -> last_month = {last_month}")
 	# await message.delete()
+	print(f'message={message}')
+	print(f'message.from_user.id={message.from_user.id}')
 	enquiry = Enquiry(message.from_user.id)
 	# first_date, end_date = create_date(last_month = last_month)
 	count_setup_status = len(get_records(enquiry.get_entities_for_statistics(STATUS_SETUP), last_month = last_month))
@@ -44,14 +46,14 @@ async def statistics(message: Message, last_month = False):
 	amount = 0
 	count = 0
 	for entity in entities:
-		amount += int(entity["f81291"])
+		amount += int(entity[f_application_total])
 		count += 1
 	# print('Заявок со статусом "УПД подписано" {} шт., на общую сумму {} руб.'.format(count, amount))
 	entities = get_records(enquiry.get_entities_for_payed(), last_month = last_month)
 	payed_amount = 0
 	payed_count = 0
 	for entity in entities:
-		payed_amount += int(entity["f81291"])
+		payed_amount += int(entity[f_application_total])
 		payed_count += 1
 	strings = ['{}  Заявок со статусом "Установлено" - <b>{}</b> шт.'.format(emojize(":one:"), count_setup_status),
 	           '{}  Заявок со статусом "УПД подписано" - <b>{}</b> шт., на общую сумму - <b>{}</b> руб.'.format(emojize(":two:"), count, amount),
@@ -67,8 +69,9 @@ async def statistics(message: Message, last_month = False):
 def get_records(records, last_month = False):
 	year, month = get_year_month(last_month = last_month)
 	ret_records = []
+	print(f'~records={records}')
 	for record in records:
-		field_date = datetime.fromisoformat(record["f78311"])
+		field_date = datetime.fromisoformat(record[f_execution_date])
 		if field_date.year == year and field_date.month == month:
 			ret_records.append(record)
 	return ret_records

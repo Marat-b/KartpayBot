@@ -58,11 +58,19 @@ async def callback_paginator(call: CallbackQuery, state: FSMContext):
 			# print("task_setup#{}".format(request_data[0]["id"]))
 			paginator.add_after(InlineKeyboardButton(text = "{}  Редактировать пробег".format(emojize(":car:")),
 			                                         callback_data = "task_edit_distance#{}".format(request_data[page - 1]["id"] if len(request_data) > 0 else [])))
+			paginator.add_after(
+				InlineKeyboardButton(
+					text="{}  Загрузить фото точки".format(emojize(":office:")),
+					callback_data="task_edit_point#{}".format(
+						request_data[page - 1]["id"] if len(request_data) > 0 else []
+						)
+					)
+				)
 			paginator.add_after(InlineKeyboardButton(text = "{}  Загрузить акт".format(emojize(":page_facing_up:")),
 			                                         callback_data = "task_edit_act#{}".format(request_data[page - 1]["id"] if len(request_data) > 0 else [])))
 			paginator.add_after(InlineKeyboardButton(text = "{}  Загрузить УПД".format(emojize(":inbox_tray:")),
 			                                         callback_data = "task_edit_upd#{}".format(request_data[page - 1]["id"] if len(request_data) > 0 else [])))
-	
+
 	paginator.add_after(InlineKeyboardButton(text = "{}  Назад".format(emojize(":leftwards_arrow_with_hook:")), callback_data = "choice_buttons"))
 	await call.message.edit_text(format_enquiry(request_data[page - 1] if len(request_data) > 0 else []), reply_markup = paginator.markup)
 

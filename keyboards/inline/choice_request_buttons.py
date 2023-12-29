@@ -10,7 +10,7 @@ def choice_request():
 			InlineKeyboardButton(text = "Передан инженеру", callback_data = "assigned_to")
 		],
 		[
-			InlineKeyboardButton(text = "Запланирован выезд", callback_data = "trip_planned")
+			InlineKeyboardButton(text = "Запланирована", callback_data = "trip_planned")
 		],
 		[
 			InlineKeyboardButton(text = "Установлено", callback_data = "setup")

@@ -61,7 +61,7 @@ async def task_done_photo(message: types.Message, state: FSMContext):
 			await message.answer("Заявка № <b>{}</b>\n{}  Файл не удалось сохранить.".format(id_task, emojize(":bangbang:")))
 	enquiry = Enquiry(message.from_user.id)
 	
-	is_done = enquiry.update_table(id = id_task, f78321 = "УПД подписан", f81301 = file_path)
+	is_done = enquiry.update_table(id = id_task, f81771 = "УПД подписан", f82101 = file_path)
 	if is_done:
 		await message.answer("{}  Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>УПД подписан</b>".format(emojize(
 				":white_check_mark:"), str(id_task)), reply_markup = choice_request())

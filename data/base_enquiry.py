@@ -9,9 +9,9 @@ class BaseEnquiry:
 	
 	def __init__(self, telegram_user_id = None):
 		self.__url_read_table = config.URL_READ_TABLE
-		self.__request_employees = config.REQUEST_TABLE_EMPLOYEES
+		self.__request_telegramuser = config.REQUEST_TABLE_TELEGRAMUSER
 		if telegram_user_id is not None:
-			self.__request_employees["filter"]["row"][config.f_telegram_id]["value"] = str(telegram_user_id)
+			self.__request_telegramuser["filter"]["row"][config.f_telegram_id]["value"] = str(telegram_user_id)
 		# self.__user_id = self.__get_user_id(telegram_user_id)
 	
 	def _get_records(self, request_db):
@@ -73,7 +73,7 @@ class BaseEnquiry:
 		Get user ID for Kartpay
 		:return: user ID for Kartpay
 		"""
-		all_records = self._get_records(self.__request_employees)
+		all_records = self._get_records(self.__request_telegramuser)
 		print(f"all_records = {all_records}")
 		if all_records is None:
 			return None

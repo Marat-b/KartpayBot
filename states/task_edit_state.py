@@ -5,3 +5,4 @@ class TaskEditState(StatesGroup):
 	PutDistance = State()
 	PutActPhoto = State()
 	PutUpdPhoto = State()
+	PutPointPhoto = State()

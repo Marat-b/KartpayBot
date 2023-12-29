@@ -39,8 +39,8 @@ REQUEST_BY_ID = json.loads(env.str("request_by_id"))
 REQUEST_FOR_PAYING = json.loads(env.str("request_for_paying"))
 REQUEST_FOR_COUNT_STATUS = json.loads(env.str("request_for_count_status"))
 REQUEST_FOR_PAYED = json.loads(env.str("request_for_payed"))
-# REQUEST_TABLE_TELEGRAMUSER = json.loads(env.str("request_table_telegramuser"))
-REQUEST_TABLE_EMPLOYEES = json.loads(env.str("request_table_employees"))
+REQUEST_TABLE_TELEGRAMUSER = json.loads(env.str("request_table_telegramuser"))
+# REQUEST_TABLE_EMPLOYEES = json.loads(env.str("request_table_employees"))
 UPDATE_TABLE_ACT = json.loads(env.str("update_table_act"))
 UPDATE_TABLE_UPD = json.loads(env.str("update_table_upd"))
 
@@ -72,11 +72,12 @@ f_delivery = env.str("f_delivery")
 f_point_photo = env.str("f_point_photo")
 f_executor = env.str("f_executor")
 f_status = env.str("f_status")
-f_telegram_id = env.str("f_telegram_id")
-f_user_id = env.str("f_user_id")
+f_telegram_id = env.str("f_telegram_id") # table f6291
+f_user_id = env.str("f_user_id")		# table f6291
 f_application_total = env.str("f_application_total")
 f_client_bank = env.str("f_client_bank")
 f_work_type = env.str("f_work_type")
 f_app_description = env.str("f_app_description")
 f_equipment = env.str("f_equipment")
+# f_telegram_link_id = env.str("f_telegram_link_id") # link table f6331 with table f1651
 

@@ -1,9 +1,11 @@
 from aiogram.utils.markdown import bold, hcode
 
-from data.config import f_act_photo, f_client, f_delivery, f_execution_date, f_id, f_mileage, f_paid_to_performer, \
+from data.config import f_act_photo, f_app_description, f_client, f_client_bank, f_delivery, f_execution_date, f_id, \
+	f_mileage, \
+	f_paid_to_performer, \
 	f_phone, f_point_address, \
 	f_status, \
-	f_target_date, f_upd_photo
+	f_target_date, f_upd_photo, f_work_type
 
 
 def format_enquiry(enquiry):
@@ -21,6 +23,9 @@ def format_enquiry(enquiry):
 		'Клиент: <b>{}</b>'.format(enquiry[f_client]),
 		'Адрес: {}'.format(enquiry[f_point_address]),
 		'Телефон: {}'.format(enquiry[f_phone]),
+		'Банк заказчик: {}'.format(enquiry[f_client_bank]),
+		'Тип работ: {}'.format(enquiry[f_work_type]),
+		'Описание заявки: {}'.format(enquiry[f_app_description]),
 		'Дата исполнения: {}'.format(hcode(enquiry[f_execution_date])),
 		'Срок установки: {}'.format(hcode(enquiry[f_target_date])),
 		'Доставка: {}'.format(enquiry[f_delivery])
@@ -42,6 +47,9 @@ def format_enquiry_for_paying(enquiry):
 		'<i>Номер заявки: {}</i>'.format(enquiry[f_id]),
 		'Клиент: <b>{}</b>'.format(enquiry[f_client]),
 		'Адрес: {}'.format(enquiry[f_point_address]),
+		'Банк заказчик: {}'.format(enquiry[f_client_bank]),
+		'Тип работ: {}'.format(enquiry[f_work_type]),
+		'Описание заявки: {}'.format(enquiry[f_app_description]),
 		'Дата исполнения: {}'.format(hcode(enquiry[f_execution_date])),
 		'Срок установки: {}'.format(hcode(enquiry[f_target_date])),
 		"Пробег: {}  км".format(enquiry[f_mileage]),

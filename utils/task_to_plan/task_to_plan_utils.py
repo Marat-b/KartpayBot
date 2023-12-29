@@ -1,5 +1,6 @@
 from aiogram.utils.emoji import emojize
 
+from data.config import STATUS_PLANNED
 from data.enquiry import Enquiry
 from keyboards.inline.inline_type_request_menu import inline_type_request_menu
 
@@ -23,7 +24,8 @@ async def task_to_plan_put_date(current_date, message, state):
 			enquiry = Enquiry(message.from_user.id)
 			# enquiry = Enquiry('1771817746')
 			# full_date = "2021-02-02 00:00:00"
-			is_done = enquiry.update_table(id = id_task, f78311 = full_date, f78321 = "Запланирован выезд")
+			# is_done = enquiry.update_table(id = id_task, f81791 = full_date, f81771 = "Запланирован выезд")
+			is_done = enquiry.update_table(id=id_task, f84750=full_date, f81771=STATUS_PLANNED)
 			# is_done = True
 			if is_done:
 				await message.answer("{} Заявка № <b>{}</b>, успешно запланирована на дату {}".

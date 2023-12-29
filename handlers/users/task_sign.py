@@ -11,6 +11,7 @@ async def task_sign(call: CallbackQuery):
 	# await call.answer(cache_time = 60)
 	# print("task_sign id = {}".format(call.from_user.id))
 	user_id = call.from_user.id
+	# user_id = "2454"  # for test only
 	enquiry = Enquiry(user_id)
 	entities = enquiry.get_entities_for_paying("УПД подписан", "Нет")
 	bonus = 0

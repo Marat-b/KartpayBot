@@ -79,7 +79,7 @@ async def task_done_distance(message: Message, state: FSMContext):
 		full_date = "{}-{}-{} 00:00:00".format(date_year, date_month, date_day)
 		enquiry = Enquiry(message.from_user.id)
 		
-		is_done = enquiry.update_table(id = id_task, f78361 = int(distance_done), f78311 = full_date, f78321 = STATUS_SETUP)
+		is_done = enquiry.update_table(id = id_task, f81971 = int(distance_done), f81791 = full_date, f81771 = STATUS_SETUP)
 		# if is_done:
 		# 	await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлено</b>".
 		# 	                     format(emojize(":white_check_mark:"), str(id_task)))
@@ -125,7 +125,7 @@ async def task_act_photo(message: Message, state: FSMContext):
 		await message.delete()
 	
 	enquiry = Enquiry(message.from_user.id)
-	is_done = enquiry.update_table(id = id_task, f81381 = file_path)
+	is_done = enquiry.update_table(id = id_task, f97690 = file_path)
 	# if is_done:
 	# 	await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлено</b>".
 	# 	                     format(emojize(":white_check_mark:"), str(id_task)))
@@ -156,7 +156,7 @@ async def act_upd_missing(call: CallbackQuery, state: FSMContext):
 	# print("call.message.from_user.id = {}".format(call.message.from_user.id))
 	# print("get me = {}".format(await bot.get_me()))
 	enquiry = Enquiry()
-	is_done = enquiry.update_table(id = id_task, f78321 = STATUS_SETUP)
+	is_done = enquiry.update_table(id = id_task, f81771 = STATUS_SETUP)
 	if is_done:
 		await call.message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлен</b>.\nЗаявка исполнена, но не доступна к выплате.".
 		                          format(emojize(":white_check_mark:"), str(id_task)), reply_markup = inline_type_request_menu())
@@ -196,7 +196,7 @@ async def task_upd_photo(message: Message, state: FSMContext):
 		await message.delete()
 		
 		enquiry = Enquiry(message.from_user.id)
-		is_done = enquiry.update_table(id = id_task, f78321 = "УПД подписан", f81301 = file_path)
+		is_done = enquiry.update_table(id = id_task, f81771 = "УПД подписан", f82101 = file_path)
 		if is_done:
 			await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>УПД подписан</b>.\n<u>Заявка доступна к выплате.</u>".
 			                     format(emojize(":white_check_mark:"), str(id_task)), reply_markup = inline_type_request_menu())

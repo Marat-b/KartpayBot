@@ -2,8 +2,8 @@ import requests
 import json
 from data import config, access_id
 from data.base_enquiry import BaseEnquiry
-from data.config import f_act_photo, f_execution_date, f_executor, f_id, f_mileage, f_paid_to_performer, f_status, \
-	f_telegram_id
+from data.config import (f_act_photo, f_execution_date, f_executor, f_id, f_mileage, f_paid_to_performer,
+						 f_status)
 
 
 class Enquiry(BaseEnquiry):
@@ -15,6 +15,7 @@ class Enquiry(BaseEnquiry):
 			self.__user_id = None
 		else:
 			self.__user_id = self._get_user_id(telegram_user_id)
+			# self.__user_id = "2454"  # for test only
 	
 	def get_entities(self, type_request):
 		"""
@@ -25,7 +26,7 @@ class Enquiry(BaseEnquiry):
 			return list()
 		request_db = config.REQUEST_DB.copy()
 		request_db["filter"]["row"][f_executor]["value"] = self.__user_id
-		# request_db["filter"]["row"][f_telegram_id]["value"] = self.telegram_user_id
+		# request_db["filter"]["row"][f_executor]["value"] = self.telegram_user_id
 		request_db["filter"]["row"][f_status]["value"] = type_request
 		all_records = self._get_records(request_db)
 		return all_records
@@ -159,4 +160,4 @@ if __name__ == "__main__":
 	# 	print(f"{str(i)}. Клиент = {client['f78201']}, Адрес клиента = {client['f78211']}, ID = {client['id']}, Телефон = {client['f78341']}, Статус = , "
 	# 	      f"Срок установки={client['f81181']} ")
 	#
-	# print(r.update_table(f78321 = "78321", f81301 = "81301", id = f_id))
+	# print(r.update_table(f81771 = "78321", f82101 = "81301", id = f_id))

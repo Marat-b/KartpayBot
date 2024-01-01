@@ -103,7 +103,7 @@ async def task_done_photo(message: types.Message, state: FSMContext):
 	enquiry = Enquiry(message.from_user.id)
 	# full_date = "2021-02-02 00:00:00"
 	# distance = 1
-	is_done = enquiry.update_act(id = id_task, f81971 = int(distance), f81791 = full_date, f81771 = "Установлено", f97690 = file_path)
+	is_done = enquiry.update_act(id = id_task, f81971 = int(distance), f81791 = full_date, f81771 = "Установлено", f82111 = file_path)
 	if is_done:
 		await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлено</b>".
 		                     format(emojize(":white_check_mark:"), str(id_task)), reply_markup = choice_request())

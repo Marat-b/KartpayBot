@@ -125,7 +125,7 @@ async def task_act_photo(message: Message, state: FSMContext):
 		await message.delete()
 	
 	enquiry = Enquiry(message.from_user.id)
-	is_done = enquiry.update_table(id = id_task, f97690 = file_path)
+	is_done = enquiry.update_table(id = id_task, f82111 = file_path)
 	# if is_done:
 	# 	await message.answer("{} Запись в БД успешно обновлена! Заявка № <b>{}</b>, установлена в статус - <b>Установлено</b>".
 	# 	                     format(emojize(":white_check_mark:"), str(id_task)))

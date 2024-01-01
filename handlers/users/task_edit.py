@@ -89,7 +89,7 @@ async def task_act_photo(message: Message, state: FSMContext):
 		if is_saved:
 			# await message.answer("{}  Файл успешно сохранён и доступен по ссылке - {}".format(emojize(":white_check_mark:"), file_path), disable_web_page_preview = True)
 			enquiry = Enquiry()
-			is_done = enquiry.update_table(id = id_task, f97690 = file_path)
+			is_done = enquiry.update_table(id = id_task, f82111 = file_path)
 			if is_done:
 				await message.answer("{} Акт выполненных работ по заявке № <b>{}</b>, успешно загружен.".
 				                     format(emojize(":white_check_mark:"), str(id_task)), reply_markup = inline_back_to_setup())
